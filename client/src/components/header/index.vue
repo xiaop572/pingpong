@@ -10,6 +10,7 @@ export default {};
 #headers {
   width: 100%;
   height: 80px;
-  background-color: #79bbff;
+  background-color: #fff;
+  box-shadow: 0 10px 10px 1px #D9ECFF;
 }
 </style>

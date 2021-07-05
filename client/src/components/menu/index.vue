@@ -13,8 +13,9 @@ export default {
 <style lang="less">
   #menu{
     width: 200px;
-    height: calc(100% - 80px);
-    background-color: #409EFF;
+    height: calc(100%);
+    box-shadow:10px 20px 2px 1px #D9ECFF;
+    overflow: hidden;
     float: left;
   }
 </style>
