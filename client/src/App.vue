@@ -1,13 +1,16 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <Layout></Layout>
   </div>
 </template>
-
+<script>
+import Layout from './components/Layout'
+export default {
+  components:{
+    Layout
+  }
+};
+</script>
 <style lang="less">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

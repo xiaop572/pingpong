@@ -17,7 +17,12 @@ module.exports = sequelize.define(
         power:{
             type: DataTypes.STRING,
             allowNull: false,
-            column:"权限"
+            column:"用户菜单权限"
+        },
+        level:{
+            type: DataTypes.STRING,
+            allowNull: false,
+            column:"代理等级"
         }
     }, {
         createdAt: false,
