@@ -1,14 +1,32 @@
 <template>
-  <div>
-    <div id="header">头部</div>
-    <div id="menu">菜单</div>
-    <div id="main">主</div>
+  <div id="layout">
+    <headers></headers>
+    <menus></menus>
+    <div id="main">
+        <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-export default {};
+import headers from '../header/'
+import menus from '../menu/'
+export default {
+    components:{
+        headers,
+        menus
+    }
+};
 </script>
 
 <style>
+#layout{
+    height: 100%;
+}
+#main{
+    width: calc(100% - 200px);
+    height: calc(100% - 80px);
+    float: left;
+    overflow-y: auto;
+}
 </style>
