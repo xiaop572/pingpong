@@ -9,3 +9,4 @@ module.exports={
 //code类型  450 token过期  451 token为空
 // 510 密码错误
 //200 成功
+//400 失败

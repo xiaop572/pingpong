@@ -2,7 +2,6 @@
   <div id="app">
     <Layout v-if="loginState"></Layout>
     <Login v-else></Login>
-    <button @click="changToken">点击</button>
   </div>
 </template>
 <script>
@@ -12,7 +11,6 @@
   export default {
     data() {
       return {
-        loginState: false
       }
     },
     components: {
@@ -20,42 +18,39 @@
       Login
     },
     methods: {
-      changToken() {
-        req.post('/api/user/login',{
-          username:"admin",
-          password:'123456'
-        }).then(res=>{
-          if(res.data.code===200){
-            localStorage.setItem('token',res.data.data.token);
-            this.loginState=true;
-          }
-        })
-      }
     },
     mounted() {
       req.post('/api/user/getUserInfo').then(res=>{
-        console.log(res);
+        if(res.data.code===200){
+          this.$store.commit("changUserInfo", res.data.data.userInfo);
+          this.$store.commit('changeLoginState',true)
+        }
       })
     },
+    computed:{
+        loginState(){
+          return this.$store.state.loginState
+        }
+    }
   };
 </script>
 <style lang="less">
-  * {
-    padding: 0;
-    margin: 0;
-  }
+* {
+  padding: 0;
+  margin: 0;
+}
 
-  html,
-  body {
-    height: 100%;
-  }
+html,
+body {
+  height: 100%;
+}
 
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    height: 100%;
-  }
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  height: 100%;
+}
 </style>

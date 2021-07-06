@@ -28,5 +28,7 @@ export default {
     height: calc(100% - 80px);
     float: left;
     overflow-y: auto;
+    box-sizing: border-box;
+    padding:20px;
 }
 </style>

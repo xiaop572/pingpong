@@ -21,12 +21,18 @@ async function login(req, res) {
         let token = jwt.createToken({ //登录成功创建token
             username: body.username
         })
+        let data = result.toJSON();
         res.send({
             success: true,
             msg: "登录成功",
             code: 200,
             data: {
-                token
+                token,
+                userInfo: {
+                    username: data.username,
+                    power: data.power,
+                    level: data.level
+                }
             }
         })
         return;
@@ -49,15 +55,17 @@ async function getUserInfo(req, res) {
             username: jwtParams.username
         }
     });
-    let data=result.toJSON();
+    let data = result.toJSON();
     res.send({
         success: true,
         msg: "获取用户数据成功",
         code: 200,
         data: {
-            username:data.username,
-            power:data.power,
-            level:data.level
+            userInfo: {
+                username: data.username,
+                power: data.power,
+                level: data.level
+            }
         }
     })
 }
