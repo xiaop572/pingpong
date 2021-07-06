@@ -2,6 +2,7 @@ const jwt = require('../utile/jwt');
 const config = require("../config");
 const userDb = require('../model/user')
 const md5 = require('md5-node');
+const ress = require('../utile/res')
 async function login(req, res) {
     let body = req.body;
     let result = await userDb.findOne({ //查询用户账号密码是否匹配
@@ -11,30 +12,21 @@ async function login(req, res) {
         }
     })
     if (!result) {
-        res.send({
-            success: false,
-            msg: "密码错误",
-            code: 510
-        })
+        ress(res, false, 510, "密码错误");
         return;
     } else {
         let token = jwt.createToken({ //登录成功创建token
             username: body.username
         })
         let data = result.toJSON();
-        res.send({
-            success: true,
-            msg: "登录成功",
-            code: 200,
-            data: {
-                token,
-                userInfo: {
-                    username: data.username,
-                    power: data.power,
-                    level: data.level
-                }
+        ress(res, true, 200, "登录成功", {
+            token,
+            userInfo: {
+                username: data.username,
+                power: data.power,
+                level: data.level
             }
-        })
+        });
         return;
     }
 }
@@ -42,11 +34,7 @@ async function login(req, res) {
 async function getUserInfo(req, res) {
     let token = req.headers.token;
     if (!token) {
-        res.send({
-            success: false,
-            msg: "token为空",
-            code: 451
-        })
+        ress(res, false, 451, "token为空", );
         return;
     }
     let jwtParams = jwt.decodeToken(token); //解析token
@@ -56,16 +44,11 @@ async function getUserInfo(req, res) {
         }
     });
     let data = result.toJSON();
-    res.send({
-        success: true,
-        msg: "获取用户数据成功",
-        code: 200,
-        data: {
-            userInfo: {
-                username: data.username,
-                power: data.power,
-                level: data.level
-            }
+    ress(res, true, 200, "获取用户数据成功", {
+        userInfo: {
+            username: data.username,
+            power: data.power,
+            level: data.level
         }
     })
 }

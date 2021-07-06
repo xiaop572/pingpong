@@ -11,7 +11,7 @@ module.exports = sequelize.define(
         },
         parent: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             column:"父级分类"
         }
     }, {
