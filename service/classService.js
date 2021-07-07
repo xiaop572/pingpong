@@ -8,6 +8,7 @@ async function addClass(req, res) {
         return;
     }
     const cla = await classifyDb.create({
+        createPerson: req.personId,
         name: body.name,
         parent: body.parent ? body.parent : null
     })
@@ -15,15 +16,48 @@ async function addClass(req, res) {
 }
 async function getClassList(req, res) {
     let classList = await classifyDb.findAll();
-    ress(res, true, 200, "获取成功", classList);
+    let newArr = sortClassList(classList);
+    ress(res, true, 200, "获取成功", newArr);
 }
-async function sortClassList(classList){
-    let result=await classifyDb.findAll();
-    let data=result.map(item=>{
+/**
+ * 
+ * @param {*} classList 
+ */
+function sortClassList(classList) {
+    let data = classList.map(item => {
         return item.toJSON()
-    });//sql实例转成对象
+    }); //sql实例转成对象
+    let newArr = [];
+    let filterArr = []; //保存push过的数组等待清除
+    data.forEach((item, index) => {
+        if (item.parent == null) { //找出父级
+            newArr.push({
+                ...item
+            })
+            filterArr.push(index)
+        }
+    })
+    filterArr.reverse() //倒序 防止splice 错误
+    filterArr.forEach(item => { //过滤掉已经push的对象
+        data.splice(item, 1)
+    })
+    newArr.forEach(item => { //循环递归找子级
+        deepAddChildren(item, data);
+    })
+    return newArr;
 }
-sortClassList()
+
+function deepAddChildren(obj, arr) {
+    arr.forEach(item => {
+        if (item.parent == obj.id) { //子级的parent等于父级id给父级添加children
+            if (!obj.children) {
+                obj.children = []
+            }
+            obj.children.push(item); //父级添加子级
+            deepAddChildren(item, arr) //子级去递归添加子级
+        }
+    })
+}
 module.exports = {
     addClass,
     getClassList

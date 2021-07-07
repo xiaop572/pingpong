@@ -9,6 +9,8 @@ module.exports=function(app){
         }
         let token=req.headers.token;
         try{
+            let id=jwt.decodeToken(token)['id'];
+            req.personId=id;
             jwt.verifyToken(token);
         }catch(e){
             ress(res,false,450,"token已过期")

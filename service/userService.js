@@ -15,10 +15,11 @@ async function login(req, res) {
         ress(res, false, 510, "密码错误");
         return;
     } else {
+        let data = result.toJSON();
         let token = jwt.createToken({ //登录成功创建token
+            id:data.id,
             username: body.username
         })
-        let data = result.toJSON();
         ress(res, true, 200, "登录成功", {
             token,
             userInfo: {

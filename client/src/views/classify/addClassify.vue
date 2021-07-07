@@ -6,7 +6,7 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="父级分类">
-        <el-cascader :options="options" :props="{ checkStrictly: true,expandTrigger:'hover',label:'name',value:'id' }"
+        <el-cascader :options="options" :props="{ checkStrictly: true,label:'name',value:'id' }"
           clearable v-model="value"></el-cascader>
       </el-form-item>
       <el-button type="primary" class="elButton" @click="addClass">添加</el-button>
@@ -23,14 +23,7 @@
         form: {
           name: ""
         },
-        options: [{
-          value: '红双喜',
-          label: '红双喜',
-          children: [{
-            value: "底板",
-            label: "底板"
-          }]
-        }]
+        options: []
       }
     },
     methods: {
@@ -38,7 +31,7 @@
         console.log(this.value);
         req.post('/api/classify/addClass', {
           name: this.form.name,
-          parent: this.value ? this.value[0] : this.value
+          parent: this.value ? this.value.reverse()[0] : this.value
         }).then(res => {
           if (res.data.code === 200) {
             this.form = {

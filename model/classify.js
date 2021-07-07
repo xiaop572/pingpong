@@ -13,6 +13,11 @@ module.exports = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: true,
             column:"父级分类"
+        },
+        createPerson:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            column:"添加该分类人员ID"
         }
     }, {
         createdAt: false,

@@ -44,6 +44,16 @@
           <el-menu-item index="/addClassify">添加分类</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
+      <el-submenu index="4">
+        <template slot="title">
+          <i class="el-icon-location"></i>
+          <span>产品管理</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item index="/ClassifyList">产品列表</el-menu-item>
+          <el-menu-item index="/addProduct">添加产品</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
     </el-menu>
   </div>
 </template>

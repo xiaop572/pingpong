@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import proClassifyList from '../views/classify/proClassifyList.vue'
 import addClassify from '../views/classify/addClassify.vue'
+import addPro from '../views/product/addPro.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -25,6 +26,14 @@ const routes = [
     component: addClassify,
     meta:{
       name:"添加分类"
+    }
+  },
+  {
+    path: '/addProduct',
+    name: 'addProduct',
+    component: addPro,
+    meta:{
+      name:"添加产品"
     }
   }
 ]
