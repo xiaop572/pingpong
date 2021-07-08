@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="addClassBox">
     <el-page-header :content="$route.meta.name"></el-page-header>
     <el-form label-position="left" label-width="80px" :model="form" class="elForm">
       <el-form-item label="分类名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="父级分类">
-        <el-cascader :options="options" :props="{ checkStrictly: true,label:'name',value:'id' }"
-          clearable v-model="value"></el-cascader>
+        <el-cascader :options="options" :props="{ checkStrictly: true,label:'name',value:'id' }" clearable
+          v-model="value"></el-cascader>
       </el-form-item>
       <el-button type="primary" class="elButton" @click="addClass">添加</el-button>
     </el-form>
@@ -57,13 +57,15 @@
 </script>
 
 <style lang="less">
-  .elForm {
-    width: 500px;
-    padding: 50px;
-    text-align: left;
+  .addClassBox {
+    .elForm {
+      width: 500px;
+      padding: 50px;
+      text-align: left;
 
-    .elButton {
-      width: 100px;
+      .elButton {
+        width: 100px;
+      }
     }
   }
 </style>
