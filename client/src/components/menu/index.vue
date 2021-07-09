@@ -1,7 +1,7 @@
 <template>
   <div id="menu">
     <el-menu
-      default-active="/"
+      :default-active="defaultPath"
       router
       class="el-menu-vertical-demo"
       @open="handleOpen"
@@ -60,6 +60,11 @@
 
 <script>
 export default {
+  data(){
+    return{
+      defaultPath:"/"
+    }
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -67,6 +72,9 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     }
+  },
+  mounted(){
+    this.defaultPath=this.$route.fullPath;
   }
 };
 </script>

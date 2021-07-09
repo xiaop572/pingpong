@@ -7,32 +7,42 @@ module.exports = sequelize.define(
         name: {
             type: DataTypes.STRING,
             allowNull: false,
-            column:"产品名称"
+            column: "产品名称"
+        },
+        classify: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            column: "成本价格"
+        },
+        costPrice: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            column: "成本价格"
         },
         agencyPrice: {
             type: DataTypes.STRING,
             allowNull: true,
-            column:"代理价格数组"
+            column: "代理价格数组"
         },
-        standPrice:{
+        size: {
             type: DataTypes.STRING,
             allowNull: true,
-            column:"规格价格"
+            column: "产品规格数组"
         },
-        count:{
+        count: {
             type: DataTypes.STRING,
             allowNull: true,
-            column:"库存"
+            column: "库存"
         },
-        introduce:{
-            type:DataTypes.TEXT,
+        introduce: {
+            type: DataTypes.TEXT,
             allowNull: true,
-            column:"产品介绍"
+            column: "产品介绍"
         },
-        createPerson:{
+        createPerson: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            column:"添加该产品人员ID"
+            column: "添加该产品人员ID"
         }
     }, {
         createdAt: false,
