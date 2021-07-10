@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import proClassifyList from '../views/classify/proClassifyList.vue'
 import addClassify from '../views/classify/addClassify.vue'
 import addPro from '../views/product/addPro.vue'
+import menuList from '../views/menu/index.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -34,6 +35,14 @@ const routes = [
     component: addPro,
     meta:{
       name:"添加产品"
+    }
+  },
+  {
+    path:'/menuList',
+    name:'menuList',
+    component:menuList,
+    meta:{
+      name:"菜单列表"
     }
   }
 ]
