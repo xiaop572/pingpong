@@ -7,22 +7,22 @@ module.exports = sequelize.define(
         name: {
             type: DataTypes.STRING,
             allowNull: false,
-            column: "菜单名"
+            column:"菜单名"
         },
         path: {
             type: DataTypes.STRING,
             allowNull: true,
-            column: "路径"
+            column:"路径"
         },
-        parent: {
+        parent:{
             type: DataTypes.STRING,
             allowNull: true,
-            column: "父级"
+            column:"父级菜单"
         },
         createPerson:{
             type: DataTypes.STRING,
-            allowNull: true,
-            column: "创建菜单人员ID"
+            allowNull: false,
+            column:"创建人员ID"
         }
     }, {
         createdAt: false,

@@ -17,7 +17,7 @@ async function login(req, res) {
     } else {
         let data = result.toJSON();
         let token = jwt.createToken({ //登录成功创建token
-            id:data.id,
+            id: data.id,
             username: body.username
         })
         ress(res, true, 200, "登录成功", {
@@ -53,7 +53,36 @@ async function getUserInfo(req, res) {
         }
     })
 }
+async function getUserList(req, res) {
+    try {
+        let result = await userDb.findAll();
+        ress(res, true, 200, "获取成功", result);
+        return;
+    } catch (e) {
+        ress(res, false, 400, e);
+        return;
+    }
+}
+async function changePowerInfo(req, res) {
+    let body = req.body;
+    try {
+        await userDb.update({
+            power: body.power
+        }, {
+            where: {
+                id: body.id
+            }
+        });
+        ress(res, true, 200, "修改成功");
+        return;
+    } catch (e) {
+        ress(res, false, 400, e);
+        return;
+    }
+}
 module.exports = {
     login,
-    getUserInfo
+    getUserInfo,
+    getUserList,
+    changePowerInfo
 }

@@ -26,7 +26,7 @@ module.exports = sequelize.define(
         },
         phone:{
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             column:"联系电话"
         }
     }, {
