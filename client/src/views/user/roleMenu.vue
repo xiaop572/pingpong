@@ -51,6 +51,7 @@ export default {
     },
     changeRole(id) {
       this.value = id;
+      this.getRoleMenuStateList(id);
     },
     changeRoleMenu(item) {
       req
