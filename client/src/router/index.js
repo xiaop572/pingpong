@@ -6,6 +6,7 @@ import addClassify from '../views/classify/addClassify.vue'
 import addPro from '../views/product/addPro.vue'
 import menuList from '../views/menu/index.vue'
 import powerMan from '../views/user/powerMan.vue'
+import roleMenu from '../views/user/roleMenu.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -52,6 +53,14 @@ const routes = [
     component:powerMan,
     meta:{
       name:"用户权限管理"
+    }
+  },
+  {
+    path:'/roleMenu',
+    name:'roleMenu',
+    component:roleMenu,
+    meta:{
+      name:"角色菜单管理"
     }
   }
 ]

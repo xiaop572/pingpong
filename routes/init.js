@@ -19,6 +19,8 @@ app.use('/api/user', require('./router/user')); //加载用户路由
 app.use('/api/classify', require('./router/classify')); //加载产品分类路由
 app.use('/api/product', require('./router/product')); //加载产品分类路由
 app.use('/api/menu', require('./router/menu')); //加载菜单路由
+app.use('/api/role', require('./router/role')); //加载菜单路由
+app.use('/api/roleMenu', require('./router/roleMenu')); //加载菜单路由
 app.get('/app-state', (req, res) => { //测试服务器成功接口
     res.send("服务器启动成功！");
 })

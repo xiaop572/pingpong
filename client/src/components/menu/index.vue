@@ -23,6 +23,7 @@
           <el-menu-item index="1-1">用户列表</el-menu-item>
           <el-menu-item index="1-2">添加用户</el-menu-item>
           <el-menu-item index="/powerMan">权限管理</el-menu-item>
+          <el-menu-item index="/roleMenu">角色菜单管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item index="/menuList">

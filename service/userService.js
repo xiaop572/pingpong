@@ -80,9 +80,13 @@ async function changePowerInfo(req, res) {
         return;
     }
 }
+async function roleList(req,res){
+    
+}
 module.exports = {
     login,
     getUserInfo,
     getUserList,
-    changePowerInfo
+    changePowerInfo,
+    roleList
 }
