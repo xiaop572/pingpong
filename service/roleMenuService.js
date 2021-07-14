@@ -19,11 +19,11 @@ async function getRoleMenuStateList(req, res) {
             result.forEach(it => {
                 if (parseInt(item.id) === parseInt(it.MenuId)) {
                     item.checked = true;
-                    console.log(item);
                 }
             })
         })
-        ress(res, true, 200, "获取成功", menuList);
+        let newArr = sortClassList(menuList)
+        ress(res, true, 200, "获取成功", newArr);
         return;
     } catch (e) {
         ress(res, false, 400, e);
@@ -52,6 +52,38 @@ async function changeRoleMenuState(req, res) {
     } catch (e) {
 
     }
+}
+/**
+ * 
+ * @param {*} classList 
+ */
+function sortClassList(classList) {
+    let newArr = [];
+    let filterArr = []; //保存push过的数组等待清除
+    classList.forEach((item, index) => {
+        if (item.parent == null) { //找出父级
+            newArr.push({
+                ...item
+            })
+            filterArr.push(index)
+        }
+    })
+    newArr.forEach(item => { //循环递归找子级
+        deepAddChildren(item, classList);
+    })
+    return newArr;
+}
+
+function deepAddChildren(obj, arr) {
+    arr.forEach(item => {
+        if (item.parent == obj.id) { //子级的parent等于父级id给父级添加children
+            if (!obj.children) {
+                obj.children = []
+            }
+            obj.children.push(item); //父级添加子级
+            deepAddChildren(item, arr) //子级去递归添加子级
+        }
+    })
 }
 module.exports = {
     getRoleMenuStateList,

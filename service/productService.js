@@ -22,7 +22,32 @@ async function addProduct(req, res) {
 async function getProduct(req, res) {
 
 }
+async function SearchProduct(req, res) {
+    try {
+        let body = req.body;
+        let page = body.page ? body.page : 1; //当前页数
+        let size = body.size ? body.size : 10; //每页显示个数
+        let data = await proDb.findAll({
+            offset: (page - 1) * size,
+            limit: size
+        })
+        let total = await proDb.count();
+        let pageCount = Math.ceil(total / size);//总页数
+        ress(res, true, 200, "获取成功", {
+            total: total,
+            currentPage: page,
+            pageSize: size,
+            pageCount,
+            data
+        });
+        return;
+    } catch (e) {
+        ress(res, false, 400, e);
+        return;
+    }
+}
 module.exports = {
     addProduct,
-    getProduct
+    getProduct,
+    SearchProduct
 }

@@ -5,4 +5,5 @@ router.get('/', (req, res) => {
 })
 router.post('/getMenuList',menuSer.getMenuList);//获取菜单接口
 router.post('/addMenu',menuSer.addMenu);//添加接口
+router.post('/getMenu',menuSer.getMenu);//获取当前角色菜单列表
 module.exports = router;

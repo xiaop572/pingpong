@@ -7,6 +7,7 @@ import addPro from '../views/product/addPro.vue'
 import menuList from '../views/menu/index.vue'
 import powerMan from '../views/user/powerMan.vue'
 import roleMenu from '../views/user/roleMenu.vue'
+import proList from '../views/product/proList.vue';
 Vue.use(VueRouter)
 
 const routes = [
@@ -61,6 +62,22 @@ const routes = [
     component:roleMenu,
     meta:{
       name:"角色菜单管理"
+    }
+  },
+  {
+    path:'/proList',
+    name:'proList',
+    component: proList,
+    meta:{
+      name:"产品列表"
+    }
+  },
+  {
+    path:'/recomPro',
+    name:'recomPro',
+    component: () => import('../views/product/recomPro.vue'),
+    meta:{
+      name:"修改产品"
     }
   }
 ]

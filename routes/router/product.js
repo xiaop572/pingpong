@@ -5,4 +5,5 @@ router.get('/', (req, res) => {
 })
 router.post('/addProduct',proSer.addProduct);//登录接口
 router.post('/getProduct',proSer.getProduct);//获取用户数据
+router.post('/SearchProduct',proSer.SearchProduct);//获取用户数据
 module.exports = router;

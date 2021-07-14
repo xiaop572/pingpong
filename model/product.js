@@ -12,7 +12,7 @@ module.exports = sequelize.define(
         classify: {
             type: DataTypes.INTEGER,
             allowNull: true,
-            column: "成本价格"
+            column: "产品分类"
         },
         costPrice: {
             type: DataTypes.INTEGER,

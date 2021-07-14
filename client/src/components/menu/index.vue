@@ -14,52 +14,36 @@
         <i class="el-icon-setting"></i>
         <span slot="title">首页</span>
       </el-menu-item>
-      <el-submenu index="1">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>用户管理</span>
+      <template v-for="item in menus">
+        <template v-if="item.children">
+          <el-submenu :key="item.id" :index="String(item.id)">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>{{item.name}}</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item v-for="it in item.children" :index="it.path" :key="it.id">{{it.name}}</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
         </template>
-        <el-menu-item-group>
-          <el-menu-item index="1-1">用户列表</el-menu-item>
-          <el-menu-item index="1-2">添加用户</el-menu-item>
-          <el-menu-item index="/powerMan">权限管理</el-menu-item>
-          <el-menu-item index="/roleMenu">角色菜单管理</el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-      <el-menu-item index="/menuList">
-        <i class="el-icon-setting"></i>
-        <span slot="title">菜单管理</span>
-      </el-menu-item>
-      <el-submenu index="3">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>产品分类管理</span>
+        <template v-else>
+          <el-menu-item :index="item.path" :key="item.id">
+            <i class="el-icon-setting"></i>
+            <span slot="title">{{item.name}}</span>
+          </el-menu-item>
         </template>
-        <el-menu-item-group>
-          <el-menu-item index="/ClassifyList">分类列表</el-menu-item>
-          <el-menu-item index="/addClassify">添加分类</el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-      <el-submenu index="4">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>产品管理</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="/ClassifyList">产品列表</el-menu-item>
-          <el-menu-item index="/addProduct">添加产品</el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
+      </template>
     </el-menu>
   </div>
 </template>
-
 <script>
+import req from "../../../api/request";
 export default {
-  data(){
-    return{
-      defaultPath:"/"
-    }
+  data() {
+    return {
+      defaultPath: "/",
+      menus: []
+    };
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -67,10 +51,28 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    getMenu() {
+      req.post("/api/menu/getMenu").then(res => {
+        if (res.data.success) {
+          this.menus = res.data.data;
+        } else {
+          this.$message({
+            message: res.data.msg,
+            type: "error"
+          });
+        }
+      });
     }
   },
-  mounted(){
-    this.defaultPath=this.$route.fullPath;
+  watch: {
+    $route(to, from) {
+      this.defaultPath = this.$route.fullPath;
+    }
+  },
+  mounted() {
+    this.getMenu();
+    this.defaultPath = this.$route.fullPath;
   }
 };
 </script>
@@ -81,7 +83,7 @@ export default {
   height: calc(100% - 60px);
   position: relative;
   background-color: #4c5e79;
-  overflow: hidden;
+  overflow-y: auto;
   float: left;
   h4 {
     text-align: center;

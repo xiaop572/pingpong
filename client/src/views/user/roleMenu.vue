@@ -14,9 +14,14 @@
       </div>
       <div class="roleRight">
         <ul>
-          <li v-for="item in menuList" :key="item.id">
-            <el-checkbox v-model="item.checked" @change="changeRoleMenu(item)">{{item.name}}</el-checkbox>
-          </li>
+          <template v-for="item in menuList">
+            <li :key="item.id">
+              <el-checkbox v-model="item.checked" @change="changeRoleMenu(item)">{{item.name}}</el-checkbox>
+            </li>
+            <template v-if="item.children">
+                <li class="sonItem" v-for="it in item.children" :key="it.id"><el-checkbox v-model="it.checked" @change="changeRoleMenu(it)">{{it.name}}</el-checkbox></li>
+            </template>
+          </template>
         </ul>
       </div>
     </div>
@@ -66,8 +71,8 @@ export default {
               message: res.data.msg,
               type: "success"
             });
-          }else{
-              this.$message({
+          } else {
+            this.$message({
               message: res.data.msg,
               type: "error"
             });
@@ -106,7 +111,7 @@ export default {
   }
   .roleRight {
     float: left;
-    width: 160px;
+    width: 180px;
     height: 400px;
     overflow-y: auto;
     margin-left: 10px;
@@ -117,6 +122,9 @@ export default {
       line-height: 40px;
       text-align: left;
       padding: 0 20px;
+    }
+    .sonItem{
+        margin-left: 22px;
     }
   }
 }
