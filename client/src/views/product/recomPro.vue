@@ -109,7 +109,7 @@ export default {
       }
       let classify =typeof this.value==='object'? this.value.reverse()[0]:this.value;
       req
-        .post("/api/product/addProduct", {
+        .post("/api/product/recomPro", {
           ...this.form,
           size: this.size,
           agencyPrice: this.agencyPrice,
@@ -121,23 +121,7 @@ export default {
               message: res.data.msg,
               type: "success"
             });
-            this.value = "";
-            this.form = {};
-            this.agencyPrice = [
-              {
-                name: "代理1",
-                price: ""
-              },
-              {
-                name: "代理2",
-                price: ""
-              },
-              {
-                name: "代理3",
-                price: ""
-              }
-            ];
-            this.size = [];
+            this.$router.push('proList');
           } else {
             this.$message({
               message: res.data.msg,

@@ -32,7 +32,7 @@ async function SearchProduct(req, res) {
             limit: size
         })
         let total = await proDb.count();
-        let pageCount = Math.ceil(total / size);//总页数
+        let pageCount = Math.ceil(total / size); //总页数
         ress(res, true, 200, "获取成功", {
             total: total,
             currentPage: page,
@@ -46,8 +46,40 @@ async function SearchProduct(req, res) {
         return;
     }
 }
+async function recomPro(req, res) {
+    try {
+        let body = req.body;
+        body.size = JSON.stringify(body.size);
+        body.agencyPrice = JSON.stringify(body.agencyPrice);
+        await proDb.update(body, {
+            where: {
+                id: body.id
+            }
+        })
+        ress(res, true, 200, "修改成功");
+    } catch (e) {
+        ress(res, false, 400, e);
+        return;
+    }
+}
+async function delPro(req, res) {
+    try {
+        let body = req.body;
+        await proDb.destroy({
+            where: {
+                id: body.id
+            }
+        });
+        ress(res, true, 200, "删除成功");
+    } catch (e) {
+        ress(res, false, 400, e);
+        return;
+    }
+}
 module.exports = {
     addProduct,
     getProduct,
-    SearchProduct
+    SearchProduct,
+    recomPro,
+    delPro
 }
