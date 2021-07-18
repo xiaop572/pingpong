@@ -24,9 +24,43 @@ async function addClass(req, res) {
     }
 }
 async function getClassList(req, res) {
-    let classList = await classifyDb.findAll();
-    let newArr = sortClassList(classList);
-    ress(res, true, 200, "获取成功", newArr);
+    try {
+        let classList = await classifyDb.findAll();
+        let newArr = sortClassList(classList);
+        ress(res, true, 200, "获取成功", newArr);
+    } catch (error) {
+        ress(res, false, 400, e);
+        return;
+    }
+}
+async function delClassify(req, res) {
+    try {
+        let body = req.body;
+        await classifyDb.destroy({
+            where: {
+                id: body.id
+            }
+        });
+        ress(res, true, 200, "删除成功");
+    } catch (e) {
+        ress(res, false, 400, e);
+        return;
+    }
+}
+async function recomClassify(req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+        await classifyDb.update(body, {
+            where: {
+                id: body.id
+            }
+        })
+        ress(res, true, 200, "修改成功");
+    } catch (e) {
+        ress(res, false, 400, e);
+        return;
+    }
 }
 /**
  * 
@@ -69,5 +103,7 @@ function deepAddChildren(obj, arr) {
 }
 module.exports = {
     addClass,
-    getClassList
+    getClassList,
+    delClassify,
+    recomClassify
 }

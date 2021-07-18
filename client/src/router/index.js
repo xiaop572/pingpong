@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import proClassifyList from '../views/classify/proClassifyList.vue'
+import classifyList from '../views/classify/classifyList.vue'
 import addClassify from '../views/classify/addClassify.vue'
+import recomClassify from '../views/classify/recomClassify.vue'
 import addPro from '../views/product/addPro.vue'
 import menuList from '../views/menu/index.vue'
 import powerMan from '../views/user/powerMan.vue'
@@ -17,11 +18,19 @@ const routes = [
     component: Home
   },
   {
-    path: '/ClassifyList',
-    name: 'ClassifyList',
-    component: proClassifyList,
+    path: '/classifyList',
+    name: 'classifyList',
+    component: classifyList,
     meta:{
       name:"产品分类"
+    }
+  },
+  {
+    path: '/recomClassify',
+    name: 'recomClassify',
+    component: recomClassify,
+    meta:{
+      name:"修改分类"
     }
   },
   {

@@ -1,6 +1,6 @@
 <template>
   <div class="addClassBox">
-    <el-page-header :content="$route.meta.name" @back="$router.push({path:'/'})"></el-page-header>
+    <el-page-header :content="$route.meta.name" @back="$router.go(-1)"></el-page-header>
     <el-form label-position="left" label-width="80px" :model="form" class="elForm">
       <el-form-item label="分类名称">
         <el-input v-model="form.name"></el-input>
@@ -13,7 +13,7 @@
           v-model="value"
         ></el-cascader>
       </el-form-item>
-      <el-button type="primary" class="elButton" @click="addClass">添加</el-button>
+      <el-button type="primary" class="elButton" @click="recomClass">添加</el-button>
     </el-form>
   </div>
 </template>
@@ -23,32 +23,33 @@ import req from "../../../api/request";
 export default {
   data() {
     return {
-      value: null,
+      value: "",
       form: {
         name: ""
       },
-      options: []
+      options: [],
+      id: ""
     };
   },
   methods: {
-    addClass() {
+    recomClass() {
       console.log(this.value);
       req
-        .post("/api/classify/addClass", {
+        .post("/api/classify/recomClassify", {
           name: this.form.name,
-          parent: this.value ? this.value.reverse()[0] : this.value
+          parent:
+            typeof this.value === "object"
+              ? this.value.reverse()[0]
+              : this.value,
+          id: this.id
         })
         .then(res => {
           if (res.data.code === 200) {
-            this.form = {
-              name: ""
-            };
-            this.value = null;
             this.$message({
-              message: "添加成功",
+              message: "修改成功",
               type: "success"
             });
-            this.getClassList();
+            this.$router.push({ name: "classifyList" });
           }
         });
     },
@@ -57,6 +58,14 @@ export default {
         if (res.data.code === 200) {
           this.options = res.data.data;
         }
+        if (!this.$route.params.id) {
+          //没有产品ID 跳转回产品列表页
+          this.$router.push({ name: "classifyList" });
+          return;
+        }
+        this.form.name = this.$route.params.name;
+        this.value = this.$route.params.parent;
+        this.id = this.$route.params.id;
       });
     }
   },

@@ -1,6 +1,6 @@
 <template>
   <div class="menuListBox">
-    <el-page-header :content="$route.meta.name"></el-page-header>
+    <el-page-header :content="$route.meta.name" @back="$router.push({path:'/'})"></el-page-header>
     <div class="menuHeader">
       <el-button type="primary" @click="dialogFormVisible=!dialogFormVisible">添加菜单</el-button>
     </div>

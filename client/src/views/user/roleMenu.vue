@@ -1,6 +1,6 @@
 <template>
   <div class="powerManBox">
-    <el-page-header :content="$route.meta.name"></el-page-header>
+    <el-page-header :content="$route.meta.name" @back="$router.push({path:'/'})"></el-page-header>
     <div class="roleMenuBox">
       <div class="roleLeft">
         <ul>

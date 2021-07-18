@@ -5,4 +5,6 @@ router.get('/', (req, res) => {
 })
 router.post('/addClass',classSer.addClass);//添加产品分类
 router.post('/getClassList',classSer.getClassList)//获取产品分类
+router.post('/delClassify',classSer.delClassify)//删除产品分类
+router.post('/recomClassify',classSer.recomClassify)//删除产品分类
 module.exports = router;

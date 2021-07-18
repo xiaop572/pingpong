@@ -1,6 +1,6 @@
 <template>
   <div class="addProBox">
-    <el-page-header :content="$route.meta.name"></el-page-header>
+    <el-page-header :content="$route.meta.name" @back="$router.push({path:'/'})"></el-page-header>
     <el-form label-position="left" label-width="80px" :model="form" class="elForm">
       <el-form-item label="产品名称">
         <el-input v-model="form.name"></el-input>

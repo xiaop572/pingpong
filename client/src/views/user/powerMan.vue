@@ -1,6 +1,6 @@
 <template>
   <div class="powerManBox">
-    <el-page-header :content="$route.meta.name"></el-page-header>
+    <el-page-header :content="$route.meta.name" @back="$router.push({path:'/'})"></el-page-header>
     <div class="powerTable">
       <el-table :data="tableData" style="width: 100%" border>
         <el-table-column label="用户名" prop="username"></el-table-column>

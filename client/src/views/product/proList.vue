@@ -1,6 +1,6 @@
 <template>
   <div class="proListBox">
-    <el-page-header :content="$route.meta.name"></el-page-header>
+    <el-page-header :content="$route.meta.name" @back="$router.push({path:'/'})"></el-page-header>
     <div class="proListTable">
       <el-table :data="proData" style="width: 100%" border>
         <el-table-column prop="name" label="产品名称"></el-table-column>
