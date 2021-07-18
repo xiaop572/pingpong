@@ -83,10 +83,27 @@ async function changePowerInfo(req, res) {
 async function roleList(req,res){
     
 }
+async function addAgency(req,res){
+    try {
+        let body=req.body;
+        body.password=md5(body.password);
+        body.power=3;
+        const result = await userDb.create(body);
+        if (result) {
+            ress(res, true, 200, "添加成功");
+            return;
+        }
+    } catch (e) {
+        console.log(e);
+        ress(res, false, 400, e);
+        return;
+    }
+}
 module.exports = {
     login,
     getUserInfo,
     getUserList,
     changePowerInfo,
-    roleList
+    roleList,
+    addAgency
 }

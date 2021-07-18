@@ -9,6 +9,7 @@ import menuList from '../views/menu/index.vue'
 import powerMan from '../views/user/powerMan.vue'
 import roleMenu from '../views/user/roleMenu.vue'
 import proList from '../views/product/proList.vue';
+import addAgency from '../views/agency/addAgency.vue';
 Vue.use(VueRouter)
 
 const routes = [
@@ -87,6 +88,14 @@ const routes = [
     component: () => import('../views/product/recomPro.vue'),
     meta:{
       name:"修改产品"
+    }
+  },
+  {
+    path:'/addAgency',
+    name:'addAgency',
+    component:addAgency,
+    meta:{
+      name:"添加代理人"
     }
   }
 ]
