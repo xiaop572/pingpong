@@ -10,6 +10,7 @@ import powerMan from '../views/user/powerMan.vue'
 import roleMenu from '../views/user/roleMenu.vue'
 import proList from '../views/product/proList.vue';
 import addAgency from '../views/agency/addAgency.vue';
+import placeOrder from '../views/placeOrder/placeOrder.vue';
 Vue.use(VueRouter)
 
 const routes = [
@@ -94,6 +95,14 @@ const routes = [
     path:'/addAgency',
     name:'addAgency',
     component:addAgency,
+    meta:{
+      name:"添加代理人"
+    }
+  },
+  {
+    path:'/placeOrder',
+    name:'placeOrder',
+    component:placeOrder,
     meta:{
       name:"添加代理人"
     }
