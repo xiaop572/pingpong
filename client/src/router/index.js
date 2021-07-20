@@ -104,7 +104,7 @@ const routes = [
     name:'placeOrder',
     component:placeOrder,
     meta:{
-      name:"添加代理人"
+      name:"下单"
     }
   }
 ]

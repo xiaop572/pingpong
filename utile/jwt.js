@@ -7,7 +7,7 @@ const config=require('../config')
 module.exports = {
     createToken: function (option) {
         const token = jwt.sign(option, config.tokenSecrect, {
-            expiresIn: 3600
+            expiresIn: 86400
         })
         return token;
     },
