@@ -16,6 +16,7 @@
     "@vue/cli-plugin-babel": "^4.5.0",
     "@vue/cli-service": "^4.5.0",
     "axios": "^0.21.1",
+    "element-china-area-data": "^5.0.2",
     "element-ui": "^2.15.3",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",

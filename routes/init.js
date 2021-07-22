@@ -22,6 +22,7 @@ app.use('/api/menu', require('./router/menu')); //加载菜单路由
 app.use('/api/role', require('./router/role')); //加载角色路由
 app.use('/api/roleMenu', require('./router/roleMenu')); //加载角色菜单路由
 app.use('/api/agency', require('./router/agency')); //加载菜单路由
+app.use('/api/placeOrder', require('./router/placeOrder')); //加载下单路由
 app.get('/app-state', (req, res) => { //测试服务器成功接口
     res.send("服务器启动成功！");
 })

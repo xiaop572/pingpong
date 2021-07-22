@@ -7,7 +7,7 @@
           <el-input v-model="form.name" placeholder="一键填充"></el-input>
         </el-form-item>
         <el-form-item label="收件人">
-          <el-input v-model="form.name" placeholder="一键填充"></el-input>
+          <el-input v-model="keyfillValue" placeholder="一键填充" @input="keyFill"></el-input>
         </el-form-item>
         <div class="addresser">
 
@@ -17,36 +17,43 @@
   </div>
 </template>
 <script>
+import req from "../../../api/request";
   export default {
     data() {
       return {
-        text: "",
-        text2: "",
-        text3: "",
-        input: "",
-        address: "温州大学",
-        tableData: [{
-          name: "龙五",
-          price: 650,
-          guige: "横"
-        }],
-        checkList: [],
+        keyfillValue:"",
         form: {
 
-        }
+        },
+        timer:null
       };
+    },
+    methods:{
+      keyFill(){
+        clearTimeout(this.timer);
+        this.timer=setTimeout(() => {
+            req.post('/api/placeOrder/explainAddress',{
+              keyfillValue:this.keyfillValue
+            })
+        }, 1000);
+      }
     }
   };
 </script>
 <style lang="less">
   .placeOrderBox {
     .elForm {
-      width: 1200px;
+      width: 1000px;
       padding: 50px;
       text-align: left;
       float: left;
       .el-form-item{
         margin-bottom: 15px !important;
+      }
+      .addresser{
+        border:1px solid #eee;
+        margin-left: 30px;
+        height: 200px;
       }
       h4 {
         margin: 10px 0;
