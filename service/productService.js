@@ -76,10 +76,22 @@ async function delPro(req, res) {
         return;
     }
 }
+async function getProductNameList(req, res) {
+    try {
+        let list = await proDb.findAll({
+            attributes: ['name','id']
+        })
+        ress(res, true, 200, "获取成功", list);
+    } catch (e) {
+        ress(res, false, 400, e);
+    }
+
+}
 module.exports = {
     addProduct,
     getProduct,
     SearchProduct,
     recomPro,
-    delPro
+    delPro,
+    getProductNameList
 }
