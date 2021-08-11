@@ -1,4 +1,6 @@
 const proDb = require('../model/placeOrder');
+const orderProductDb = require('../model/orderProduct')
+const placeOrderDb = require('../model/placeOrder')
 const ress = require('../utile/res')
 var appId = '109637';
 var method = 'cloud.address.resolve';
@@ -45,6 +47,40 @@ async function explainAddress(req, res) {
   });
 
 }
+async function createOrder(req, res) {
+  try {
+    let body = req.body;
+    let ran = Math.floor(Math.random() * 888888 + 1000000);
+    let orderCode = new Date().getTime() + ran;
+    await placeOrderDb.create({
+      order: orderCode,
+      sender: body.sender,
+      receName: body.receName,
+      recePhone: body.recePhone,
+      receAddress: body.receAddress,
+      createTime: +new Date(),
+      remark: body.remark.join(","),
+      orderState: "1",
+      createPerson: req.personId
+    })
+    body.productList.forEach(async item => {
+      if (item.id) {
+        await orderProductDb.create({
+          number: item.number ? item.number : 1,
+          order: orderCode,
+          productId: item.id,
+          remark: item.remark,
+          name: item.name,
+          price: item.price
+        })
+      }
+    })
+    ress(res, true, 200, "添加成功");
+  } catch (error) {
+    ress(res, false, 400, error);
+  }
+}
 module.exports = {
-  explainAddress
+  explainAddress,
+  createOrder
 }

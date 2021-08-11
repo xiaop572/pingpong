@@ -1,4 +1,5 @@
 const proDb = require('../model/product');
+const userDb = require('../model/user')
 const ress = require('../utile/res')
 async function addProduct(req, res) {
     const body = req.body;
@@ -78,10 +79,29 @@ async function delPro(req, res) {
 }
 async function getProductNameList(req, res) {
     try {
-        let list = await proDb.findAll({
-            attributes: ['name','id']
+        let user = await userDb.findOne({
+            where: {
+                id: req.personId
+            }
         })
-        ress(res, true, 200, "获取成功", list);
+        let list = await proDb.findAll({
+            attributes: ['name', 'id', 'agencyPrice']
+        })
+        let newArr = []
+        //数据库查询标准数组化
+        newArr = list.map(item => {
+            return item.toJSON();
+        })
+        newArr.forEach(item => {
+            let agen = JSON.parse(item.agencyPrice);
+            agen.forEach(it => {
+                if (parseInt(it.level) === parseInt(user.level)) {
+                    item.price = it.price;
+                }
+            })
+            delete item.agencyPrice;
+        })
+        ress(res, true, 200, "获取成功", newArr);
     } catch (e) {
         ress(res, false, 400, e);
     }

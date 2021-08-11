@@ -33,13 +33,39 @@
                   @focus="focusinput(scope.row)"></el-autocomplete>
               </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="产品数量" width="110">
               <template slot-scope="scope">
-                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                {{scope.row.price}}
+              </template>
+            </el-table-column>
+            <el-table-column label="产品数量" width="110">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.number" placeholder="默认为1" style="width: 80px;"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="备注">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.remark" placeholder="备注"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot="header" slot-scope="scope">
+                <el-button type="primary" @click="addRow">添加行</el-button>
+              </template>
+              <template slot-scope="scope">
+                <el-button size="mini" type="danger" @click="delRow(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
+          <div class="remarkBox">
+            <h4>备注:</h4>
+            <el-checkbox-group v-model="checkList">
+              <el-checkbox label="粘拍"></el-checkbox>
+              <el-checkbox label="护边"></el-checkbox>
+              <el-checkbox label="护膜"></el-checkbox>
+            </el-checkbox-group>
+          </div>
+          <el-button type="primary" class="placeBtn" @click="placeSub">下单</el-button>
         </div>
       </el-form>
     </div>
@@ -55,10 +81,9 @@
         form: {
 
         },
+        checkList: [],
         targetObj: {},
-        tableData: [{
-          id: "11"
-        }, {}, {}],
+        tableData: [{}, {}, {}, {}],
         textarea: "",
         timer: null,
         timer1: null,
@@ -124,7 +149,79 @@
         })
       },
       handleSelect(item) {
-        this.targetObj.id = item.id;
+        this.$set(this.targetObj, 'id', item.id)
+        this.$set(this.targetObj, 'price', item.price)
+      },
+      //添加行
+      addRow() {
+        this.tableData.push({})
+      },
+      //删除行数据
+      delRow(row) {
+        console.log(this.tableData);
+        this.tableData.forEach((item, index) => {
+          if (item === row) {
+            this.tableData.splice(index, 1);
+          }
+        })
+      },
+      placeSub() {
+        if (!this.sendName || !this.sendPhone || !this.sendAddress) {
+          this.$message({
+            message: "请输入发件人信息",
+            type: "error"
+          });
+          return;
+        } else if (!this.receName || !this.recePhone || !this.receAddress) {
+          this.$message({
+            message: "请输入收件人信息",
+            type: "error"
+          });
+          return;
+        }
+        let state = false;
+        this.tableData.forEach(item => {
+          if (item.id) {
+            state = true;
+          }
+        })
+        if (!state) {
+          this.$message({
+            message: "请添加产品",
+            type: "error"
+          });
+          return;
+        }
+        req.post('/api/placeOrder/createOrder', {
+          sender: this.sendName + " " + this.sendPhone + " " + this.sendAddress,
+          receName: this.receName,
+          recePhone: this.recePhone,
+          receAddress: this.receAddress,
+          remark: this.checkList,
+          productList: this.tableData
+        }).then(res => {
+          if (res.data.success) {
+            this.$message({
+              message: res.data.msg,
+              type: "success"
+            });
+            this.sendKeyFillValue="";
+            this.keyfillValue="";
+            this.sendName="";
+            this.sendPhone="";
+            this.sendAddress="";
+            this.receName="";
+            this.recePhone="";
+            this.receAddress="";
+            this.checkList=[];
+            this.tableData=[{}, {}, {}, {}];
+          } else {
+            this.$message({
+              message: res.data.msg,
+              type: "error"
+            });
+          }
+        })
       }
     },
     mounted() {
@@ -139,6 +236,19 @@
       padding: 50px;
       text-align: left;
       float: left;
+
+      .placeBtn {
+        margin: 50px 30px;
+        width: 100px;
+      }
+
+      .remarkBox {
+        margin-left: 30px;
+
+        h4 {
+          margin: 20px 0;
+        }
+      }
 
       .el-table {
         width: 970px;
@@ -186,9 +296,10 @@
           }
         }
       }
-      .proList{
-        .inline-input{
-            width: 100%;
+
+      .proList {
+        .inline-input {
+          width: 100%;
         }
       }
     }
