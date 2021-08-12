@@ -8,4 +8,5 @@ router.post('/getProduct',proSer.getProduct);//获取用户数据
 router.post('/SearchProduct',proSer.SearchProduct);//搜索获取用户数据
 router.post('/recomPro',proSer.recomPro);//修改产品
 router.post('/delPro',proSer.delPro);//删除产品
+router.post('/getProductNameList',proSer.getProductNameList);//删除产品
 module.exports = router;

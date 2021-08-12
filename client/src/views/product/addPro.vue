@@ -6,30 +6,14 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="产品分类">
-        <el-cascader
-          :options="options"
-          :props="{ checkStrictly: true,label:'name',value:'id' }"
-          clearable
-          v-model="value"
-        ></el-cascader>
+        <el-cascader :options="options" :props="{ checkStrictly: true,label:'name',value:'id' }" clearable
+          v-model="value"></el-cascader>
       </el-form-item>
       <el-form-item label="产品规格">
-        <el-tag
-          :key="tag"
-          v-for="tag in size"
-          closable
-          :disable-transitions="false"
-          @close="handleClose(tag)"
-        >{{tag}}</el-tag>
-        <el-input
-          class="input-new-tag"
-          v-if="inputVisible"
-          v-model="inputValue"
-          ref="saveTagInput"
-          size="small"
-          @keyup.enter.native="handleInputConfirm"
-          @blur="handleInputConfirm"
-        ></el-input>
+        <el-tag :key="tag" v-for="tag in size" closable :disable-transitions="false" @close="handleClose(tag)">{{tag}}
+        </el-tag>
+        <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
+          @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm"></el-input>
         <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加规格</el-button>
       </el-form-item>
       <el-form-item label="成本价格">
@@ -54,146 +38,150 @@
   </div>
 </template>
 <script>
-import req from "../../../api/request";
-export default {
-  data() {
-    return {
-      value: null,
-      form: {},
-      options: [],
-      size: [],
-      inputVisible: false,
-      inputValue: "",
-      agencyPrice: [
-        {
-          name: "代理1",
-          price: ""
-        },
-        {
-          name: "代理2",
-          price: ""
-        },
-        {
-          name: "代理3",
-          price: ""
+  import req from "../../../api/request";
+  export default {
+    data() {
+      return {
+        value: null,
+        form: {},
+        options: [],
+        size: [],
+        inputVisible: false,
+        inputValue: "",
+        agencyPrice: [{
+            name: "代理1",
+            level: 1,
+            price: ""
+          },
+          {
+            name: "代理2",
+            level: 2,
+            price: ""
+          },
+          {
+            name: "代理3",
+            level: 3,
+            price: ""
+          }
+        ]
+      };
+    },
+    methods: {
+      onSubmit() {
+        if (!this.value || !this.form.name || !this.form.costPrice) {
+          this.$message({
+            message: "名称、成本价、分类不能为空",
+            type: "error"
+          });
+          return;
         }
-      ]
-    };
-  },
-  methods: {
-    onSubmit() {
-      if (!this.value || !this.form.name || !this.form.costPrice) {
-        this.$message({
-          message: "名称、成本价、分类不能为空",
-          type: "error"
-        });
-        return;
-      }
-      let classify = this.value.reverse()[0];
-      req
-        .post("/api/product/addProduct", {
-          ...this.form,
-          size: this.size,
-          agencyPrice: this.agencyPrice,
-          classify
-        })
-        .then(res => {
-          if (res.data.success) {
-            this.$message({
-              message: res.data.msg,
-              type: "success"
-            });
-            this.value = "";
-            this.form = {};
-            this.agencyPrice = [
-              {
-                name: "代理1",
-                price: ""
-              },
-              {
-                name: "代理2",
-                price: ""
-              },
-              {
-                name: "代理3",
-                price: ""
-              }
-            ];
-            this.size=[]
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: "error"
-            });
+        let classify = this.value.reverse()[0];
+        req
+          .post("/api/product/addProduct", {
+            ...this.form,
+            size: this.size,
+            agencyPrice: this.agencyPrice,
+            classify
+          })
+          .then(res => {
+            if (res.data.success) {
+              this.$message({
+                message: res.data.msg,
+                type: "success"
+              });
+              this.value = "";
+              this.form = {};
+              this.agencyPrice = [{
+                  name: "代理1",
+                  level: 1,
+                  price: ""
+                },
+                {
+                  name: "代理2",
+                  level: 2,
+                  price: ""
+                },
+                {
+                  name: "代理3",
+                  level: 3,
+                  price: ""
+                }
+              ];
+              this.size = []
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
+            }
+          });
+      },
+      getClassList() {
+        req.post("/api/classify/getClassList").then(res => {
+          if (res.data.code === 200) {
+            this.options = res.data.data;
           }
         });
-    },
-    getClassList() {
-      req.post("/api/classify/getClassList").then(res => {
-        if (res.data.code === 200) {
-          this.options = res.data.data;
+      },
+      handleClose(tag) {
+        this.size.splice(this.dynamicTags.indexOf(tag), 1);
+      },
+
+      showInput() {
+        this.inputVisible = true;
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus();
+        });
+      },
+
+      handleInputConfirm() {
+        let inputValue = this.inputValue;
+        if (inputValue) {
+          this.size.push(inputValue);
         }
-      });
-    },
-    handleClose(tag) {
-      this.size.splice(this.dynamicTags.indexOf(tag), 1);
-    },
-
-    showInput() {
-      this.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
-
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        this.size.push(inputValue);
+        this.inputVisible = false;
+        this.inputValue = "";
+      },
+      handleEdit(index, row) {
+        console.log(index, row);
+      },
+      handleDelete(index, row) {
+        console.log(index, row);
       }
-      this.inputVisible = false;
-      this.inputValue = "";
     },
-    handleEdit(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
-      console.log(index, row);
+    mounted() {
+      this.getClassList();
     }
-  },
-  mounted() {
-    this.getClassList();
-  }
-};
+  };
 </script>
 <style lang="less">
-.addProBox {
-  .elForm {
-    width: 800px;
-    padding: 50px;
-    text-align: left;
+  .addProBox {
+    .elForm {
+      width: 800px;
+      padding: 50px;
+      text-align: left;
 
-    .elButton {
-      width: 100px;
+      .elButton {
+        width: 100px;
+      }
+    }
+
+    .el-tag+.el-tag {
+      margin-left: 10px;
+    }
+
+    .button-new-tag {
+      margin-left: 10px;
+      height: 32px;
+      line-height: 30px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .input-new-tag {
+      width: 90px;
+      margin-left: 10px;
+      vertical-align: bottom;
     }
   }
-
-  .el-tag + .el-tag {
-    margin-left: 10px;
-  }
-
-  .button-new-tag {
-    margin-left: 10px;
-    height: 32px;
-    line-height: 30px;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-  .input-new-tag {
-    width: 90px;
-    margin-left: 10px;
-    vertical-align: bottom;
-  }
-}
 </style>

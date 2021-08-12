@@ -8,6 +8,7 @@
   import Layout from './components/Layout';
   import Login from './views/Login';
   import req from '../api/request.js'
+  import axios from 'axios'
   export default {
     data() {
       return {
