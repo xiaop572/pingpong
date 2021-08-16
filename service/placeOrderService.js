@@ -80,7 +80,49 @@ async function createOrder(req, res) {
     ress(res, false, 400, error);
   }
 }
+async function getOrderListSearch(req, res) {
+  try {
+    let body = req.body;
+    let page = body.page ? body.page : 1; //当前页数
+    let size = body.size ? body.size : 10; //每页显示个数
+    let data = await placeOrderDb.findAll({
+      offset: (page - 1) * size,
+      limit: size
+    })
+    let total = await placeOrderDb.count();
+    let pageCount = Math.ceil(total / size); //总页数
+    ress(res, true, 200, "获取成功", {
+      total: total,
+      currentPage: page,
+      pageSize: size,
+      pageCount,
+      data
+    });
+    return;
+  } catch (e) {
+    ress(res, false, 400, e);
+    return;
+  }
+}
+async function getOrderPro(req, res) {
+  try {
+    let body = req.body;
+    console.log(body.order);
+    let data = await orderProductDb.findAll({
+      where:{
+        order:body.order
+      }
+    })
+    ress(res, true, 200, "获取成功", data);
+    return;
+  } catch (e) {
+    ress(res, false, 400, e);
+    return;
+  }
+}
 module.exports = {
   explainAddress,
-  createOrder
+  createOrder,
+  getOrderListSearch,
+  getOrderPro
 }

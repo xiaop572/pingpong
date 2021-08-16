@@ -11,6 +11,7 @@ import roleMenu from '../views/user/roleMenu.vue'
 import proList from '../views/product/proList.vue';
 import addAgency from '../views/agency/addAgency.vue';
 import placeOrder from '../views/placeOrder/placeOrder.vue';
+import OrderList from '../views/Order/OrderList.vue';
 Vue.use(VueRouter)
 
 const routes = [
@@ -105,6 +106,14 @@ const routes = [
     component:placeOrder,
     meta:{
       name:"下单"
+    }
+  },
+  {
+    path:'/OrderList',
+    name:'OrderList',
+    component:OrderList,
+    meta:{
+      name:"订单列表"
     }
   }
 ]
