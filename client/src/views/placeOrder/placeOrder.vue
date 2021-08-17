@@ -33,7 +33,7 @@
                   @focus="focusinput(scope.row)"></el-autocomplete>
               </template>
             </el-table-column>
-            <el-table-column label="产品数量" width="110">
+            <el-table-column label="产品价格" width="110">
               <template slot-scope="scope">
                 {{scope.row.price}}
               </template>

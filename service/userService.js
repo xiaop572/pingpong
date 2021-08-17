@@ -99,52 +99,6 @@ async function addAgency(req, res) {
         return;
     }
 }
-async function test(req, ress) {
-    var request = require("request");
-    const md5 = require('md5-node');
-    let key = "XJZdhhWY8529";
-    let t = +new Date();
-    let secret = "51cc2c7eba444ab8b3eab7f988e3713b";
-    let param = {
-        type: "10",
-        partnerId: "K57786860",
-        partnerKey: "Ahs8IQjt",
-        kuaidicom: "yuantong",
-        recManName: "林鹏程",
-        recManMobile: "18557731771",
-        recManPrintAddr: "浙江省温州市瓯海区南白象街道安盛锦园5栋502",
-        sendManName: "姜浙海",
-        sendManMobile: "15968751886",
-        sendManPrintAddr: "浙江省温州市龙湾区天河街道永丰东路140号",
-        tempid: "3468bc6bac5548709abf5652f51d076b",
-        count: "1",
-    }
-    let sign = md5(JSON.stringify(param) + t + key + secret).toLocaleUpperCase();
-    console.log(sign);
-    let params = {
-        url: "https://poll.kuaidi100.com/printapi/printtask.do",
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        form: {
-            method: "getPrintImg",
-            key,
-            sign,
-            t,
-            param: JSON.stringify(param)
-        }
-    };
-    request(params,
-        (err, res, body) => {
-            console.log(body);
-            if (JSON.parse(body).data) {
-                ress.send(JSON.parse(body).data.kuaidinum);
-            } else {
-                ress.send("失败")
-            }
-        })
-}
 module.exports = {
     login,
     getUserInfo,
@@ -152,5 +106,4 @@ module.exports = {
     changePowerInfo,
     roleList,
     addAgency,
-    test
 }

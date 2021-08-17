@@ -42,7 +42,7 @@ module.exports = sequelize.define(
         orderState: {
             type: DataTypes.STRING,
             allowNull: false,
-            column: "订单状态 1下单 2发货 3退货"
+            column: "订单状态 1等发货 2发货 3退货"
         },
         createPerson: {
             type: DataTypes.INTEGER,

@@ -8,6 +8,7 @@ require("./role")//角色表
 require("./roleMenu")//角色菜单表
 require("./placeOrder")//订单表
 require("./orderProduct")//订单产品表
+require("./logistics")//快递单号表
 const sequelize = require("./db");
 sequelize.sync({ alter: true }).then(() => {
   console.log("所有模型同步完成");
