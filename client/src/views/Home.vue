@@ -13,6 +13,9 @@ export default {
     }
   },
   mounted() {
+    // req.post("/api/user/test").then(res => {
+    //   console.log(res)
+    // });
   }
 };
 </script>
