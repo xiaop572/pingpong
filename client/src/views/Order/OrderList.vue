@@ -12,15 +12,36 @@
         <el-table-column prop="name" label="订单状态">
           <template slot-scope="scope">
             <span v-if="scope.row.orderState==1">待发货</span>
+            <span v-if="scope.row.orderState==2">已发货</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" @click="ship(scope.row)" type="primary">发货</el-button>
+            <el-button
+              size="mini"
+              @click="ship(scope.row)"
+              type="primary"
+              v-if="scope.row.orderState==1"
+            >发货</el-button>
+            <el-button
+              size="mini"
+              @click="ship(scope.row)"
+              type="primary"
+              v-if="scope.row.orderState==2"
+            >重打</el-button>
             <el-button size="mini" @click="lookOrderPro(scope.row)" type="success">查看订单物品</el-button>
           </template>
         </el-table-column>
       </el-table>
+      
+        <el-dialog title="物品清单" :visible.sync="lookProList">
+          <el-table :data="proListingData" border>
+            <el-table-column property="order" label="订单号"></el-table-column>
+            <el-table-column property="name" label="产品名称"></el-table-column>
+            <el-table-column property="number" label="数量"></el-table-column>
+            <el-table-column property="remark" label="备注"></el-table-column>
+          </el-table>
+        </el-dialog>
       <div class="pageBox">
         <el-pagination
           background
@@ -33,13 +54,12 @@
         ></el-pagination>
       </div>
     </div>
-    <el-dialog title="物品清单" :visible.sync="lookProList">
-      <el-table :data="proListingData" border>
-        <el-table-column property="order" label="订单号"></el-table-column>
-        <el-table-column property="name" label="产品名称"></el-table-column>
-        <el-table-column property="number" label="数量"></el-table-column>
-        <el-table-column property="remark" label="备注"></el-table-column>
-      </el-table>
+    <el-dialog title="快递单号" :visible.sync="lookImg">
+      <img :src="imgSrc" alt id="danImg" style="width:350px" />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="lookImg = false">取 消</el-button>
+        <el-button type="primary" v-print="'#danImg'" @click="lookImg = false">打 印</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -49,6 +69,7 @@ import req from "../../../api/request";
 export default {
   data() {
     return {
+      lookImg: false,
       proData: [],
       total: 0,
       currentPage: 1,
@@ -60,12 +81,13 @@ export default {
       socket: null,
       content: {},
       num: [],
-      defaultPrinter:undefined
+      defaultPrinter: undefined,
+      imgSrc: ""
     };
   },
   mounted() {
     this.getPro();
-    this.webSocket();
+    // this.webSocket();
   },
   methods: {
     getPro() {
@@ -89,34 +111,41 @@ export default {
       this.getPro();
     },
     ship(row) {
-      this.$confirm("是否获取单号并打印?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.getOdd(row);
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+      this.getOdd(row);
+      // this.$confirm("是否生成电子单号?", "提示", {
+      //   confirmButtonText: "确定",
+      //   cancelButtonText: "取消",
+      //   type: "warning"
+      // })
+      //   .then(() => {
+      //     this.getOdd(row);
+      //   })
+      //   .catch(() => {
+      //     this.$message({
+      //       type: "info",
+      //       message: "已取消删除"
+      //     });
+      //   });
     },
     getOdd(row) {
+      console.log(row);
       req
         .post("/api/logistics/getOdd", {
           order: row.order,
           sender: row.sender,
           receName: row.receName,
           recePhone: row.recePhone,
-          receAddress: row.receAddress
+          receAddress: row.receAddress,
+          remark: row.remark
         })
         .then(res => {
           if (res.data.code === 200) {
-            this.initData(row, res); //初始化数据
-            this.doPrint(this.defaultPrinter,this.num)
+            let base64 = JSON.parse(res.data.data.OrderImg)[0];
+            this.imgSrc = "data:image/jpeg;base64," + base64;
+            this.lookImg = true;
+            this.getPro();
+            // this.initData(row, res); //初始化数据
+            // this.doPrint(this.defaultPrinter,this.num)
           } else {
             this.$message({
               message: res.data.msg,
@@ -234,8 +263,7 @@ export default {
           message: "成功连接到打印组件",
           type: "success"
         });
-        this.socket.onmessage = function(event) {
-        };
+        this.socket.onmessage = function(event) {};
         this.socket.addEventListener("close", event => {
           this.$message({
             showClose: true,
@@ -304,7 +332,7 @@ export default {
     },
     getWaybillJson(waybillNO) {
       //获取waybill对应的json object，此处的ajaxGet函数是伪代码
-       var jsonObject = {jiade:waybillNO}// ajaxGet(waybillNO);
+      var jsonObject = { jiade: waybillNO }; // ajaxGet(waybillNO);
       return jsonObject;
     },
     getPrintList() {

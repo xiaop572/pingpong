@@ -1,5 +1,7 @@
 const logisticsDb = require('../model/logistics')
+const orderProductDb = require('../model/orderProduct')
 const config = require('../config')
+const placeOrderDb = require('../model/placeOrder')
 const ress = require('../utile/res')
 const md5 = require('md5-node');
 var request = require("request");
@@ -11,17 +13,28 @@ async function getOdd(req, res) {
                 OrderId: body.order
             }
         });
-        if (result) {
-            ress(res, true, 200,"获取单号成功", {
-                kuaidinum: result.OrderCode
+        if (result && result.OrderImg && result.OrderCode) {
+            ress(res, true, 200, "获取单号成功", {
+                kuaidinum: result.OrderCode,
+                OrderImg: result.OrderImg
             })
             return;
         }
+
+        let Prolist = await orderProductDb.findAll({
+            where: {
+                order: body.order
+            }
+        })
+        let remarks = ""
+        Prolist.forEach(item => {
+            remarks += item.name + " " + item.remark + " 数量" + item.number + " ";
+        })
+        remarks = remarks + ` ${body.remark}`
         let sender = body.sender;
         let senderArr = sender.split(' ');
         let key = "XJZdhhWY8529";
         let t = +new Date();
-        let secret = "51cc2c7eba444ab8b3eab7f988e3713b";
         let param = {
             type: "10",
             partnerId: config.oddPartnerId,
@@ -35,6 +48,7 @@ async function getOdd(req, res) {
             sendManPrintAddr: senderArr[2],
             tempid: "3468bc6bac5548709abf5652f51d076b",
             count: "1",
+            cargo: `(${remarks})`
         }
         let sign = md5(JSON.stringify(param) + t + config.oddKey + config.oddSecret).toLocaleUpperCase();
         let params = {
@@ -55,15 +69,26 @@ async function getOdd(req, res) {
             async (err, resolve, bodys) => {
                 if (JSON.parse(bodys).data) {
                     let data = JSON.parse(bodys).data;
-                    if (!data) {
-                        throw new Error('快递单号错误')
+                    if (!JSON.parse(bodys).result) {
+                        ress(res, false, 400, JSON.parse(bodys).message);
+                        return;
                     }
                     await logisticsDb.create({
                         OrderId: body.order,
-                        OrderCode: data.kuaidinum
+                        OrderCode: data.kuaidinum,
+                        OrderImg: data.imgBase64,
+                        createTime: +new Date()
                     })
-                    ress(res, true, 200,"获取单号成功", {
-                        kuaidinum: data.kuaidinum
+                    let Order = await placeOrderDb.findOne({
+                        where: {
+                            order: body.order
+                        }
+                    })
+                    Order.orderState = 2;
+                    Order.save()
+                    ress(res, true, 200, "获取单号成功", {
+                        kuaidinum: data.kuaidinum,
+                        OrderImg: data.imgBase64
                     });
                 } else {
                     ress(res, false, 400, err);
