@@ -34,6 +34,11 @@ module.exports = sequelize.define(
             allowNull: true,
             column: "产品名"
         },
+        cost: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            column: "成本价"
+        },
         proState: {
             type: DataTypes.TEXT,
             allowNull: true,

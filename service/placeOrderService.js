@@ -4,7 +4,7 @@ const placeOrderDb = require('../model/placeOrder')
 const ress = require('../utile/res')
 var appId = '109637';
 var method = 'cloud.address.resolve';
-
+JSON.stringify
 var appKey = '2fdeeac6cfb841dd94a575c2c5dd65041bcc9d44';
 var request = require("request");
 
@@ -64,6 +64,7 @@ async function createOrder(req, res) {
       createPerson: req.personId
     })
     body.productList.forEach(async item => {
+      console.log(item)
       if (item.id) {
         await orderProductDb.create({
           number: item.number ? item.number : 1,
