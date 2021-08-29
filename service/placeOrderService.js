@@ -1,4 +1,4 @@
-const proDb = require('../model/placeOrder');
+const proDb = require('../model/product');
 const orderProductDb = require('../model/orderProduct')
 const placeOrderDb = require('../model/placeOrder')
 const ress = require('../utile/res')
@@ -64,15 +64,21 @@ async function createOrder(req, res) {
       createPerson: req.personId
     })
     body.productList.forEach(async item => {
-      console.log(item)
       if (item.id) {
+        let pro=await proDb.findOne({
+          where:{
+            id:item.id
+          }
+        })
+        console.log(pro.costPrice)
         await orderProductDb.create({
           number: item.number ? item.number : 1,
           order: orderCode,
           productId: item.id,
           remark: item.remark,
           name: item.name,
-          price: item.price
+          price: item.price,
+          cost:pro.costPrice
         })
       }
     })

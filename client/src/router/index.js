@@ -12,6 +12,7 @@ import proList from '../views/product/proList.vue';
 import addAgency from '../views/agency/addAgency.vue';
 import placeOrder from '../views/placeOrder/placeOrder.vue';
 import OrderList from '../views/Order/OrderList.vue';
+import channelPro from '../views/product/channelPro';
 Vue.use(VueRouter)
 
 const routes = [
@@ -114,6 +115,14 @@ const routes = [
     component:OrderList,
     meta:{
       name:"订单列表"
+    }
+  },
+  {
+    path:'/channelPro',
+    name:'channelPro',
+    component:channelPro,
+    meta:{
+      name:"导入产品"
     }
   }
 ]
