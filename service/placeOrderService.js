@@ -1,6 +1,7 @@
 const proDb = require('../model/product');
 const orderProductDb = require('../model/orderProduct')
 const placeOrderDb = require('../model/placeOrder')
+const sequelize = require('../model/db')
 const ress = require('../utile/res')
 var appId = '109637';
 var method = 'cloud.address.resolve';
@@ -65,9 +66,9 @@ async function createOrder(req, res) {
     })
     body.productList.forEach(async item => {
       if (item.id) {
-        let pro=await proDb.findOne({
-          where:{
-            id:item.id
+        let pro = await proDb.findOne({
+          where: {
+            id: item.id
           }
         })
         console.log(pro.costPrice)
@@ -78,7 +79,7 @@ async function createOrder(req, res) {
           remark: item.remark,
           name: item.name,
           price: item.price,
-          cost:pro.costPrice
+          cost: pro.costPrice
         })
       }
     })
@@ -130,9 +131,48 @@ async function getOrderPro(req, res) {
     return;
   }
 }
+async function getOrderListShipped(req, res) {
+  try {
+    let body = req.body;
+    let page = body.page ? body.page : 1; //当前页数
+    let size = body.size ? body.size : 10; //每页显示个数
+    let data = await sequelize.query('select * from placeOrders,logistics where placeOrders.order=logistics.OrderId and orderState=?  order by placeOrders.createTime desc limit ? offset ?', {
+      replacements: [body.orderState, size, (page - 1) * size]
+    });
+    // let data = await placeOrderDb.findAll({
+    //   where: {
+    //     orderState: body.orderState
+    //   },
+    //   offset: (page - 1) * size,
+    //   limit: size,
+    //   order: [
+    //     ['createTime', 'desc']
+    //   ]
+    // })
+
+    let total = await placeOrderDb.count({
+      where: {
+        orderState: body.orderState
+      }
+    });
+    let pageCount = Math.ceil(total / size); //总页数
+    ress(res, true, 200, "获取成功", {
+      total: total,
+      currentPage: page,
+      pageSize: size,
+      pageCount,
+      data:data[0]
+    });
+    return;
+  } catch (e) {
+    ress(res, false, 400, e);
+    return;
+  }
+}
 module.exports = {
   explainAddress,
   createOrder,
   getOrderListSearch,
-  getOrderPro
+  getOrderPro,
+  getOrderListShipped
 }

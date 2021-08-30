@@ -1,5 +1,6 @@
 const proDb = require('../model/product');
 const userDb = require('../model/user')
+const classifyDb = require('../model/classify')
 const ress = require('../utile/res')
 async function addProduct(req, res) {
     const body = req.body;
@@ -107,11 +108,46 @@ async function getProductNameList(req, res) {
     }
 
 }
+async function channelExcel(req,res){
+    try {
+        let body = req.body;
+        body.createPerson = req.personId;
+        body.excelList.forEach(async item=>{
+            let proClass=await classifyDb.findOne({
+                where:{
+                    name:item['产品分类'],
+                    parent:body.value[0]
+                }
+            })
+            let daiArr=[]
+            for(it in item){
+                if(it.indexOf('代理')>=0){
+                    let level=it.split('代理')[1];
+                    daiArr.push({
+                        name:it,level,price:item[it]
+                    })
+                }
+            }
+            await proDb.create({
+                name:item['产品名称'],
+                count:item['库存'],
+                classify:proClass.id,
+                costPrice:item['成本价'],
+                agencyPrice:JSON.stringify(daiArr),
+                createPerson:body.createPerson 
+            })
+        })
+        ress(res,true,200,"导入成功")
+    } catch (e) {
+        ress(res, false, 400, e);
+    }
+}
 module.exports = {
     addProduct,
     getProduct,
     SearchProduct,
     recomPro,
     delPro,
-    getProductNameList
+    getProductNameList,
+    channelExcel
 }

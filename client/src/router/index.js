@@ -13,6 +13,7 @@ import addAgency from '../views/agency/addAgency.vue';
 import placeOrder from '../views/placeOrder/placeOrder.vue';
 import OrderList from '../views/Order/OrderList.vue';
 import channelPro from '../views/product/channelPro';
+import shipped from '../views/Order/shipped.vue';
 Vue.use(VueRouter)
 
 const routes = [
@@ -123,6 +124,14 @@ const routes = [
     component:channelPro,
     meta:{
       name:"导入产品"
+    }
+  },
+  {
+    path:'/shipped',
+    name:'shipped',
+    component:shipped,
+    meta:{
+      name:"已发货产品"
     }
   }
 ]
