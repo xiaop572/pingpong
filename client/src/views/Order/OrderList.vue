@@ -94,7 +94,8 @@ export default {
       req
         .post("/api/placeOrder/getOrderListSearch", {
           page: this.currentPage,
-          size: this.pageSize
+          size: this.pageSize,
+          orderState: 1
         })
         .then(res => {
           this.proData = res.data.data.data; //产品数据

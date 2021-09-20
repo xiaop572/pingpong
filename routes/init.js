@@ -1,11 +1,20 @@
 const express = require("express");
 const config = require("../config.js"); //配置文件
+const history = require("connect-history-api-fallback");
 const app = express();
 const cors = require("cors"); //跨域
 const path = require('path');
 require('./intercept')(app);
 const cookieParser = require('cookie-parser');
 const staticPath = path.resolve(__dirname, '../client/dist'); //静态路径
+app.use(history({
+    rewrites: [{
+      from: /^\/api\/.*$/,
+      to: function (context) {
+        return context.parsedUrl.path
+      }
+    }]
+  }));
 app.use(express.static(staticPath)); //静态文件
 // 解析 application/x-www-form-urlencoded 格式的请求体
 app.use(express.urlencoded({

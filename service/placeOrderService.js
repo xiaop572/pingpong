@@ -94,13 +94,20 @@ async function getOrderListSearch(req, res) {
     let page = body.page ? body.page : 1; //当前页数
     let size = body.size ? body.size : 10; //每页显示个数
     let data = await placeOrderDb.findAll({
+      where: {
+        orderState: body.orderState
+      },
       offset: (page - 1) * size,
       limit: size,
       order: [
         ['createTime', 'desc']
       ]
     })
-    let total = await placeOrderDb.count();
+    let total = await placeOrderDb.count({
+      where: {
+        orderState: body.orderState
+      }
+    });
     let pageCount = Math.ceil(total / size); //总页数
     ress(res, true, 200, "获取成功", {
       total: total,
@@ -136,7 +143,7 @@ async function getOrderListShipped(req, res) {
     let body = req.body;
     let page = body.page ? body.page : 1; //当前页数
     let size = body.size ? body.size : 10; //每页显示个数
-    let data = await sequelize.query('select * from placeOrders,logistics where placeOrders.order=logistics.OrderId and orderState=?  order by placeOrders.createTime desc limit ? offset ?', {
+    let data = await sequelize.query('select placeOrders.order,placeOrders.sender,placeOrders.receName,placeOrders.recePhone,placeOrders.receAddress,placeOrders.orderState,logistics.OrderCode,logistics.createTime as logisticsTime,placeOrders.createTime as placeTime from placeOrders,logistics where placeOrders.order=logistics.OrderId and orderState=?  order by placeOrders.createTime desc limit ? offset ?', {
       replacements: [body.orderState, size, (page - 1) * size]
     });
     // let data = await placeOrderDb.findAll({
@@ -161,7 +168,7 @@ async function getOrderListShipped(req, res) {
       currentPage: page,
       pageSize: size,
       pageCount,
-      data:data[0]
+      data: data[0]
     });
     return;
   } catch (e) {

@@ -9,6 +9,12 @@
         <el-table-column prop="recePhone" label="收件人电话"></el-table-column>
         <el-table-column prop="receAddress" label="收件人地址"></el-table-column>
         <el-table-column prop="OrderCode" label="快递单号"></el-table-column>
+        <el-table-column label="订单时间">
+          <template slot-scope="scope">{{tranTime(scope.row.placeTime)}}</template>
+        </el-table-column>
+        <el-table-column label="单号生成时间">
+          <template slot-scope="scope">{{tranTime(scope.row.logisticsTime)}}</template>
+        </el-table-column>
         <el-table-column prop="name" label="订单状态">
           <template slot-scope="scope">
             <span v-if="scope.row.orderState==1">待发货</span>
@@ -202,7 +208,7 @@ export default {
       });
     },
     tranTime(time) {
-      return moment(parseInt(time*1000)).format("YYYY/MM/DD hh:mm:ss");
+      return moment(parseInt(time)).format("YYYY-MM-DD HH:mm:ss");
     },
     delPro(row) {
       this.$confirm("是否删除该产品?", "提示", {
