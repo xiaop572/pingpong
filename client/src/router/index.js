@@ -14,6 +14,7 @@ import placeOrder from '../views/placeOrder/placeOrder.vue';
 import OrderList from '../views/Order/OrderList.vue';
 import channelPro from '../views/product/channelPro';
 import shipped from '../views/Order/shipped.vue';
+import address from '../views/address/address.vue';
 Vue.use(VueRouter)
 
 const routes = [
@@ -132,6 +133,14 @@ const routes = [
     component:shipped,
     meta:{
       name:"已发货产品"
+    }
+  },
+  {
+    path:'/address',
+    name:'address',
+    component:address,
+    meta:{
+      name:"地址薄"
     }
   }
 ]

@@ -4,7 +4,14 @@
     <div class="elForm">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="发件人">
-          <el-input v-model="sendKeyFillValue" placeholder="一键填充" @input="senKeyFill"></el-input>
+          <el-select v-model="sendKeyFillValue" placeholder="请选择" @change="senKeyFill" class="selectInput">
+            <el-option
+              v-for="item in addressList"
+              :key="item.id"
+              :label="item.name+' '+item.phone+' '+item.address"
+              :value="item.name+item.phone+item.address">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="收件人">
           <el-input v-model="keyfillValue" placeholder="一键填充" @input="keyFill"></el-input>
@@ -93,7 +100,8 @@
         receName: "",
         recePhone: "",
         receAddress: "",
-        restaurants: [], //产品列表
+        restaurants: [], //产品列表,
+        addressList:[]
       };
     },
     methods: {
@@ -222,10 +230,18 @@
             });
           }
         })
+      },
+      getAddressList(){
+        req.post('/api/address/getAddressList').then(res=>{
+          if(res.data.code===200){
+            this.addressList=res.data.data;
+          }
+        })
       }
     },
     mounted() {
-      this.getProductList()
+      this.getProductList();
+      this.getAddressList()
     },
   };
 </script>
@@ -241,7 +257,9 @@
         margin: 50px 30px;
         width: 100px;
       }
-
+      .selectInput{
+        width: 920px;
+      }
       .remarkBox {
         margin-left: 30px;
 

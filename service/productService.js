@@ -119,6 +119,7 @@ async function channelExcel(req,res){
                     parent:body.value[0]
                 }
             })
+            console.log(proClass,"???")
             let daiArr=[]
             for(it in item){
                 if(it.indexOf('代理')>=0){
