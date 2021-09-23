@@ -3,7 +3,7 @@
     <el-page-header :content="$route.meta.name"></el-page-header>
     <div class="elForm">
       <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="发件人">
+        <!-- <el-form-item label="发件人">
           <el-select v-model="sendKeyFillValue" placeholder="请选择" @change="senKeyFill" class="selectInput">
             <el-option
               v-for="item in addressList"
@@ -12,16 +12,21 @@
               :value="item.name+item.phone+item.address">
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="收件人">
           <el-input v-model="keyfillValue" placeholder="一键填充" @input="keyFill"></el-input>
         </el-form-item>
         <div class="addresser">
           <div class="Receive">
             <span>发货人:</span>
-            <el-input v-model="sendName" placeholder="姓名" class="name"></el-input>
-            <el-input v-model="sendPhone" placeholder="电话" class="phone"></el-input>
-            <el-input v-model="sendAddress" placeholder="地址" class="address"></el-input>
+            <el-select v-model="sendKeyFillValue" placeholder="请选择" class="selectInput">
+            <el-option
+              v-for="item in addressList"
+              :key="item.id"
+              :label="item.name+' '+item.phone+' '+item.address"
+              :value="item.name+item.phone+item.address">
+            </el-option>
+          </el-select>
           </div>
           <div class="Receive">
             <span>收件人:</span>
@@ -174,7 +179,7 @@
         })
       },
       placeSub() {
-        if (!this.sendName || !this.sendPhone || !this.sendAddress) {
+        if (!this.sendKeyFillValue) {
           this.$message({
             message: "请输入发件人信息",
             type: "error"
@@ -201,7 +206,8 @@
           return;
         }
         req.post('/api/placeOrder/createOrder', {
-          sender: this.sendName + " " + this.sendPhone + " " + this.sendAddress,
+          // sender: this.sendName + " " + this.sendPhone + " " + this.sendAddress,
+          sender:this.sendKeyFillValue,
           receName: this.receName,
           recePhone: this.recePhone,
           receAddress: this.receAddress,
@@ -258,7 +264,8 @@
         width: 100px;
       }
       .selectInput{
-        width: 920px;
+        width: 700px;
+        margin-left: 10px;
       }
       .remarkBox {
         margin-left: 30px;
