@@ -98,6 +98,26 @@ async function getOdd(req, res) {
         ress(res, false, 400, error);
     }
 }
+async function getOddImg(req, res) {
+    try {
+        let body = req.body;
+        let result = await logisticsDb.findOne({
+            where: {
+                OrderId: body.order
+            }
+        });
+        if (result && result.OrderImg && result.OrderCode) {
+            ress(res, true, 200, "获取单号成功", {
+                kuaidinum: result.OrderCode,
+                OrderImg: result.OrderImg
+            })
+            return;
+        }
+    } catch (error) {
+        ress(res, false, 400, err);
+    }
+}
 module.exports = {
-    getOdd
+    getOdd,
+    getOddImg
 }

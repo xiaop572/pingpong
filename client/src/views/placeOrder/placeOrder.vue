@@ -20,13 +20,10 @@
           <div class="Receive">
             <span>发货人:</span>
             <el-select v-model="sendKeyFillValue" placeholder="请选择" class="selectInput">
-            <el-option
-              v-for="item in addressList"
-              :key="item.id"
-              :label="item.name+' '+item.phone+' '+item.address"
-              :value="item.name+item.phone+item.address">
-            </el-option>
-          </el-select>
+              <el-option v-for="item in addressList" :key="item.id" :label="item.name+' '+item.phone+' '+item.address"
+                :value="item.name+item.phone+item.address">
+              </el-option>
+            </el-select>
           </div>
           <div class="Receive">
             <span>收件人:</span>
@@ -106,7 +103,7 @@
         recePhone: "",
         receAddress: "",
         restaurants: [], //产品列表,
-        addressList:[]
+        addressList: []
       };
     },
     methods: {
@@ -207,7 +204,7 @@
         }
         req.post('/api/placeOrder/createOrder', {
           // sender: this.sendName + " " + this.sendPhone + " " + this.sendAddress,
-          sender:this.sendKeyFillValue,
+          sender: this.sendKeyFillValue,
           receName: this.receName,
           recePhone: this.recePhone,
           receAddress: this.receAddress,
@@ -219,35 +216,45 @@
               message: res.data.msg,
               type: "success"
             });
-            this.sendKeyFillValue="";
-            this.keyfillValue="";
-            this.sendName="";
-            this.sendPhone="";
-            this.sendAddress="";
-            this.receName="";
-            this.recePhone="";
-            this.receAddress="";
-            this.checkList=[];
-            this.tableData=[{}, {}, {}, {}];
+            localStorage.setItem('defaultAddress',this.sendKeyFillValue);
+            this.getDefaultAddress()
+            this.sendKeyFillValue = "";
+            this.keyfillValue = "";
+            this.sendName = "";
+            this.sendPhone = "";
+            this.sendAddress = "";
+            this.receName = "";
+            this.recePhone = "";
+            this.receAddress = "";
+            this.checkList = [];
+            this.tableData = [{}, {}, {}, {}];
           } else {
             this.$message({
               message: res.data.msg,
               type: "error"
             });
+            
           }
         })
       },
-      getAddressList(){
-        req.post('/api/address/getAddressList').then(res=>{
-          if(res.data.code===200){
-            this.addressList=res.data.data;
+      getAddressList() {
+        req.post('/api/address/getAddressList').then(res => {
+          if (res.data.code === 200) {
+            this.addressList = res.data.data;
           }
         })
+      },
+      getDefaultAddress(){
+        let defaultAddress=localStorage.getItem('defaultAddress');
+      if(defaultAddress){
+        this.sendKeyFillValue=defaultAddress;
+      }
       }
     },
     mounted() {
       this.getProductList();
-      this.getAddressList()
+      this.getAddressList();
+      this.getDefaultAddress();
     },
   };
 </script>
@@ -263,10 +270,12 @@
         margin: 50px 30px;
         width: 100px;
       }
-      .selectInput{
+
+      .selectInput {
         width: 700px;
         margin-left: 10px;
       }
+
       .remarkBox {
         margin-left: 30px;
 
