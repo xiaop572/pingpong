@@ -33,6 +33,7 @@ async function getOdd(req, res) {
         remarks = remarks + ` ${body.remark}`
         let sender = body.sender;
         let senderArr = sender.split(' ');
+        console.log(senderArr);
         let key = "XJZdhhWY8529";
         let t = +new Date();
         let param = {
@@ -67,6 +68,7 @@ async function getOdd(req, res) {
         };
         request(params,
             async (err, resolve, bodys) => {
+                console.log(bodys);
                 if (JSON.parse(bodys).data) {
                     let data = JSON.parse(bodys).data;
                     if (!JSON.parse(bodys).result) {
@@ -91,7 +93,7 @@ async function getOdd(req, res) {
                         OrderImg: data.imgBase64
                     });
                 } else {
-                    ress(res, false, 400, err);
+                    ress(res, false, 400, JSON.parse(bodys).message);
                 }
             })
     } catch (error) {

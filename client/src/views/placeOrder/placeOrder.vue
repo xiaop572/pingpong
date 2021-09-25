@@ -24,7 +24,7 @@
               v-for="item in addressList"
               :key="item.id"
               :label="item.name+' '+item.phone+' '+item.address"
-              :value="item.name+item.phone+item.address">
+              :value="item.name+' '+item.phone+' '+item.address">
             </el-option>
           </el-select>
           </div>
@@ -118,7 +118,7 @@
       },
       createFilter(queryString) {
         return (restaurant) => {
-          return (restaurant.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+          return (restaurant.name.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
         };
       },
       senKeyFill() {
