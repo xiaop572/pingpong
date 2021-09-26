@@ -176,10 +176,40 @@ async function getOrderListShipped(req, res) {
     return;
   }
 }
+async function getmyOrderList(req, res) {
+  console.log(req.personId)
+  try {
+    let personId = req.personId;
+    let body = req.body;
+    let page = body.page ? body.page : 1; //当前页数
+    let size = body.size ? body.size : 10; //每页显示个数
+    let data = await sequelize.query('select placeOrders.order,placeOrders.sender,placeOrders.receName,placeOrders.recePhone,placeOrders.receAddress,placeOrders.orderState,logistics.OrderCode,logistics.createTime as logisticsTime,placeOrders.createTime as placeTime from placeOrders LEFT JOIN logistics ON placeOrders.order=logistics.OrderId where placeOrders.createPerson=?   order by placeOrders.createTime desc limit ? offset ?', {
+      replacements: [personId, size, (page - 1) * size, ]
+    });
+    let total = await placeOrderDb.count({
+      where: {
+        createPerson: personId
+      }
+    });
+    let pageCount = Math.ceil(total / size); //总页数
+    ress(res, true, 200, "获取成功", {
+      total: total,
+      currentPage: page,
+      pageSize: size,
+      pageCount,
+      data: data[0]
+    });
+    return;
+  } catch (e) {
+    ress(res, false, 400, e);
+    return;
+  }
+}
 module.exports = {
   explainAddress,
   createOrder,
   getOrderListSearch,
   getOrderPro,
-  getOrderListShipped
+  getOrderListShipped,
+  getmyOrderList
 }

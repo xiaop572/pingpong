@@ -15,6 +15,7 @@ import OrderList from '../views/Order/OrderList.vue';
 import channelPro from '../views/product/channelPro';
 import shipped from '../views/Order/shipped.vue';
 import address from '../views/address/address.vue';
+import myOrder from '../views/Order/myOrder.vue';
 Vue.use(VueRouter)
 
 const routes = [
@@ -139,6 +140,14 @@ const routes = [
     path:'/address',
     name:'address',
     component:address,
+    meta:{
+      name:"地址薄"
+    }
+  },
+  {
+    path:'/MyOrder',
+    name:'MyOrder',
+    component:myOrder,
     meta:{
       name:"地址薄"
     }
