@@ -21,7 +21,7 @@
             <span>发货人:</span>
             <el-select v-model="sendKeyFillValue" placeholder="请选择" class="selectInput">
               <el-option v-for="item in addressList" :key="item.id" :label="item.name+' '+item.phone+' '+item.address"
-                :value="item.name+item.phone+item.address">
+                :value="item.name+' '+item.phone+' '+item.address">
               </el-option>
             </el-select>
           </div>
