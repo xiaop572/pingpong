@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors"); //跨域
 const path = require('path');
 require('./intercept')(app);
+require('../socket/init')(app);
 const cookieParser = require('cookie-parser');
 const staticPath = path.resolve(__dirname, '../client/dist'); //静态路径
 app.use(history({

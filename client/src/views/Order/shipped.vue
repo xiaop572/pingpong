@@ -4,10 +4,10 @@
     <div class="proListTable">
       <el-table :data="proData" style="width: 100%" border>
         <el-table-column prop="order" label="订单号"></el-table-column>
-        <el-table-column prop="sender" label="发件人"></el-table-column>
+        <el-table-column prop="sender" label="发件人" show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="receName" label="收件人姓名"></el-table-column>
         <el-table-column prop="recePhone" label="收件人电话"></el-table-column>
-        <el-table-column prop="receAddress" label="收件人地址"></el-table-column>
+        <el-table-column prop="receAddress" label="收件人地址" show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="OrderCode" label="快递单号"></el-table-column>
         <el-table-column label="订单时间">
           <template slot-scope="scope">{{tranTime(scope.row.placeTime)}}</template>
