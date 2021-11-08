@@ -44,6 +44,11 @@ module.exports = sequelize.define(
             allowNull: false,
             column: "订单状态 1等发货 2发货 3退货"
         },
+        readState:{
+            type: DataTypes.STRING,
+            allowNull: false,
+            column: "已处理状态  0 未读 1已读"
+        },
         createPerson: {
             type: DataTypes.INTEGER,
             allowNull: false,
