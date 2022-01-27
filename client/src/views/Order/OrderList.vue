@@ -1,6 +1,9 @@
 <template>
   <div class="proListBox">
     <el-page-header :content="$route.meta.name" @back="$router.push({path:'/'})"></el-page-header>
+    <div class="fujia">
+      <el-button size="mini" type="primary">监听订单</el-button>
+    </div>
     <div class="proListTable">
       <el-table :data="proData" style="width: 100%" border>
         <el-table-column prop="order" label="订单号"></el-table-column>
@@ -15,7 +18,7 @@
             <span v-if="scope.row.orderState==2">已发货</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="300">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -29,19 +32,25 @@
               type="primary"
               v-if="scope.row.orderState==2"
             >重打</el-button>
+            <el-button
+              size="mini"
+              @click="read(scope.row)"
+              type="primary"
+              v-if="scope.row.readState==='0'"
+            >待处理</el-button>
             <el-button size="mini" @click="lookOrderPro(scope.row)" type="success">查看订单物品</el-button>
           </template>
         </el-table-column>
       </el-table>
-      
-        <el-dialog title="物品清单" :visible.sync="lookProList">
-          <el-table :data="proListingData" border>
-            <el-table-column property="order" label="订单号"></el-table-column>
-            <el-table-column property="name" label="产品名称"></el-table-column>
-            <el-table-column property="number" label="数量"></el-table-column>
-            <el-table-column property="remark" label="备注"></el-table-column>
-          </el-table>
-        </el-dialog>
+
+      <el-dialog title="物品清单" :visible.sync="lookProList">
+        <el-table :data="proListingData" border>
+          <el-table-column property="order" label="订单号"></el-table-column>
+          <el-table-column property="name" label="产品名称"></el-table-column>
+          <el-table-column property="number" label="数量"></el-table-column>
+          <el-table-column property="remark" label="备注"></el-table-column>
+        </el-table>
+      </el-dialog>
       <div class="pageBox">
         <el-pagination
           background
@@ -61,6 +70,7 @@
         <el-button type="primary" v-print="'#danImg'" @click="lookImg = false">打 印</el-button>
       </div>
     </el-dialog>
+    <audio src="../../assets/tishi.wav" ref="audio"></audio>
   </div>
 </template>
 
@@ -101,6 +111,11 @@ export default {
           this.proData = res.data.data.data; //产品数据
           this.total = res.data.data.total; //总条数
         });
+    },
+    read(row) {
+      req.post("/api/placeOrder/readOrder", row).then(res => {
+        this.getPro()
+      });
     },
     changePage(page) {
       this.currentPage = page;
@@ -383,6 +398,10 @@ export default {
 
   .pageBox {
     padding: 50px 0;
+  }
+  .fujia {
+    padding: 30px 0;
+    text-align: left;
   }
 }
 </style>

@@ -7,6 +7,7 @@
       <ul>
         <li @click="rAddress">地址薄</li>
       </ul>
+      我的欠款：{{debt}}
     </span>
   </div>
 </template>
@@ -16,6 +17,9 @@
     computed: {
       username() {
         return this.$store.state.userInfo.username;
+      },
+      debt(){
+        return this.$store.state.userInfo.debt;
       }
     },
     methods: {

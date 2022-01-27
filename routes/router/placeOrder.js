@@ -9,4 +9,5 @@ router.post('/getOrderListSearch',placeOrderService.getOrderListSearch);//获取
 router.post('/getOrderPro',placeOrderService.getOrderPro);//订单物品清单
 router.post('/getOrderListShipped',placeOrderService.getOrderListShipped);//发货状态列表
 router.post('/getmyOrderList',placeOrderService.getmyOrderList);//我的订单列表
+router.post('/readOrder',placeOrderService.readOrder);//我的订单列表
 module.exports = router;

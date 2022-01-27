@@ -1,6 +1,7 @@
 const proDb = require('../model/product');
 const orderProductDb = require('../model/orderProduct')
 const placeOrderDb = require('../model/placeOrder')
+const userDb = require('../model/user')
 const sequelize = require('../model/db')
 const ress = require('../utile/res')
 var appId = '109637';
@@ -64,6 +65,7 @@ async function createOrder(req, res) {
       orderState: "1",
       createPerson: req.personId
     })
+    let moneySum = 0;
     body.productList.forEach(async item => {
       if (item.id) {
         let pro = await proDb.findOne({
@@ -71,7 +73,7 @@ async function createOrder(req, res) {
             id: item.id
           }
         })
-        console.log(pro.costPrice)
+        moneySum += item.price;
         await orderProductDb.create({
           number: item.number ? item.number : 1,
           order: orderCode,
@@ -83,6 +85,15 @@ async function createOrder(req, res) {
         })
       }
     })
+    let user = await userDb.findOne({
+      where: {
+        id: req.personId
+      }
+    })
+    user.debt+=moneySum;
+    user.save();
+    console.log(user.debt,moneySum,"user")
+    
     ress(res, true, 200, "添加成功");
   } catch (error) {
     ress(res, false, 400, error);
@@ -91,6 +102,7 @@ async function createOrder(req, res) {
 async function getOrderListSearch(req, res) {
   try {
     let body = req.body;
+    console.log(req.personId)
     let page = body.page ? body.page : 1; //当前页数
     let size = body.size ? body.size : 10; //每页显示个数
     let data = await placeOrderDb.findAll({
@@ -205,11 +217,29 @@ async function getmyOrderList(req, res) {
     return;
   }
 }
+async function readOrder(req, res) {
+  try {
+    let body = req.body;
+    let data = await placeOrderDb.findOne({
+      where: {
+        id: body.id
+      }
+    })
+    data.readState = 1;
+    data.save()
+    ress(res, true, 200, "成功");
+    return;
+  } catch (e) {
+    ress(res, false, 400, e);
+    return;
+  }
+}
 module.exports = {
   explainAddress,
   createOrder,
   getOrderListSearch,
   getOrderPro,
   getOrderListShipped,
-  getmyOrderList
+  getmyOrderList,
+  readOrder
 }

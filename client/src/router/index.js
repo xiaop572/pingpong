@@ -10,6 +10,7 @@ import powerMan from '../views/user/powerMan.vue'
 import roleMenu from '../views/user/roleMenu.vue'
 import proList from '../views/product/proList.vue';
 import addAgency from '../views/agency/addAgency.vue';
+import myAgency from '../views/agency/myAgency.vue';
 import placeOrder from '../views/placeOrder/placeOrder.vue';
 import OrderList from '../views/Order/OrderList.vue';
 import channelPro from '../views/product/channelPro';
@@ -102,6 +103,14 @@ const routes = [
     component:addAgency,
     meta:{
       name:"添加代理人"
+    }
+  },
+  {
+    path:'/myAgency',
+    name:'myAgency',
+    component:myAgency,
+    meta:{
+      name:"我的代理"
     }
   },
   {

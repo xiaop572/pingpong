@@ -28,6 +28,12 @@ module.exports = sequelize.define(
             type: DataTypes.STRING,
             allowNull: true,
             column:"联系电话"
+        },
+        debt:{
+            type: DataTypes.DOUBLE,
+            allowNull: false,
+            column:"欠款",
+            defaultValue:0
         }
     }, {
         createdAt: false,

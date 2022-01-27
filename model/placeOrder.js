@@ -47,6 +47,7 @@ module.exports = sequelize.define(
         readState:{
             type: DataTypes.STRING,
             allowNull: false,
+            defaultValue:0,
             column: "已处理状态  0 未读 1已读"
         },
         createPerson: {

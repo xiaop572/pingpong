@@ -25,7 +25,8 @@ async function login(req, res) {
             userInfo: {
                 username: data.username,
                 power: data.power,
-                level: data.level
+                level: data.level,
+                debt: data.debt
             }
         });
         return;
@@ -49,7 +50,8 @@ async function getUserInfo(req, res) {
         userInfo: {
             username: data.username,
             power: data.power,
-            level: data.level
+            level: data.level,
+            debt: data.debt
         }
     })
 }
@@ -99,6 +101,20 @@ async function addAgency(req, res) {
         return;
     }
 }
+async function getAgency(req, res) {
+    try {
+        let result = await userDb.findAll({
+            where:{
+                power:3
+            }
+        });
+        ress(res, true, 200, "获取成功", result);
+        return;
+    } catch (e) {
+        ress(res, false, 400, e);
+        return;
+    }
+}
 module.exports = {
     login,
     getUserInfo,
@@ -106,4 +122,5 @@ module.exports = {
     changePowerInfo,
     roleList,
     addAgency,
+    getAgency
 }

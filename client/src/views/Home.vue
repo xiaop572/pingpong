@@ -1,5 +1,6 @@
 <template>
-  <div class="home"><img :src="imgSrc" alt="">
+  <div class="home">
+    <img :src="imgSrc" alt />
   </div>
 </template>
 
@@ -8,11 +9,12 @@
 import req from "../../api/request";
 export default {
   name: "Home",
-  data(){
-    return{
-      imgSrc:""
-    }
+  data() {
+    return {
+      imgSrc: ""
+    };
   },
+  
   mounted() {
     // req.post("/api/user/test").then(res => {
     //   console.log(res)
